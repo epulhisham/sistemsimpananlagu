@@ -39,15 +39,6 @@
                 @enderror
             </div>
             <div class="mb-3">
-                <label for="password">Password</label>
-                <input type="password" name="password" class="form-control rounded-bottom @error('password') is-invalid @enderror" id="password" placeholder="Password" required value="{{ old('password',auth()->user()->password) }}">
-                @error('password')
-                    <div class="invalid-feedback">
-                        {{ $message }}
-                    </div>
-                @enderror
-            </div>
-            <div class="mb-3">
                 <label for="choose_user" class="form-label">Pilih Pengguna</label>
                 <select class="form-select" name="choose_user_id">
                     <option value="0">- Pilih -</option>

@@ -29,7 +29,6 @@ class UserController extends Controller
     {
         $rules = [
             'name'=>'required|max:255',
-            'password'=>'required|min:5|max:255',
             'choose_user_id'=>'required|not_in:0'
         ];
 
@@ -44,8 +43,6 @@ class UserController extends Controller
         }
 
         $validatedData = $request->validate($rules);
-
-        $validatedData['password'] = bcrypt($validatedData['password']);
 
         User::where('id', auth()->user()->id)->update($validatedData);
 
