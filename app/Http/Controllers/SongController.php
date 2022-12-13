@@ -343,7 +343,7 @@ class SongController extends Controller
         }
         
         Song::destroy($song->id);
-        return redirect()->back()->withErrors($song)->withInput()->with('success', 'Lagu telah dipadam!');
+        return redirect('/mainpage/songs')->withErrors($song)->withInput()->with('success', 'Lagu telah dipadam!');
     }
 
 

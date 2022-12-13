@@ -38,19 +38,6 @@
                     </div>
                 @enderror
             </div>
-            <div class="mb-3">
-                <label for="choose_user" class="form-label">Pilih Pengguna</label>
-                <select class="form-select" name="choose_user_id">
-                    <option value="0">- Pilih -</option>
-                    @foreach ($choose_users as $choose_user )
-                    @if (old('choose_user_id',auth()->user()->choose_user_id) == $choose_user->id)
-                        <option value="{{ $choose_user->id }}" selected>{{ $choose_user->pilih_pengguna }}</option>
-                    @else
-                        <option value="{{ $choose_user->id }}">{{ $choose_user->pilih_pengguna }}</option>
-                    @endif
-                @endforeach
-                </select>
-            </div>
 
             <a href="{{ url()->previous() }}" class="btn btn-dark link-light">
                 <span data-feather="arrow-left"></span>

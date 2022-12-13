@@ -28,8 +28,7 @@ class UserController extends Controller
     public function update(Request $request, User $user)
     {
         $rules = [
-            'name'=>'required|max:255',
-            'choose_user_id'=>'required|not_in:0'
+            'name'=>'required|max:255'
         ];
 
         if($request->username != auth()->user()->username){

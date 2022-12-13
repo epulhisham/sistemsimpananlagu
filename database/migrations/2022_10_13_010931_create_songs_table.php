@@ -27,7 +27,7 @@ return new class extends Migration
             $table->string('penulis_lirik');
             $table->string('syarikat_rakaman');
             $table->string('kategori_lagu');
-            $table->decimal('saiz');
+            $table->string('saiz');
             $table->integer('masa_minit');
             $table->integer('masa_saat');
             $table->string('catatan');
