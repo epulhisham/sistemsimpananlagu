@@ -28,7 +28,7 @@ class UserController extends Controller
     public function update(Request $request, User $user)
     {
         $rules = [
-            'name'=>'required|max:255'
+            'name'=>'required|max:255',
         ];
 
         if($request->username != auth()->user()->username){
@@ -45,10 +45,22 @@ class UserController extends Controller
 
         User::where('id', auth()->user()->id)->update($validatedData);
 
-        return redirect('/mainpage/songs')->with('success', 'Profile telah dikemaskini!');
+        if($user->choose_user_id == 1){
+            return redirect('/lagu')->with('success', 'Profile telah dikemaskini!');
+        } 
+        if($user->choose_user_id == 2){
+            return redirect('/lagu')->with('success', 'Profile telah dikemaskini!');
+        } 
+        if($user->choose_user_id == 3){
+            return redirect('/penilai-lagu')->with('success', 'Profile telah dikemaskini!');
+        } 
+        if($user->choose_user_id == 4){
+            return redirect('/pelulus-lagu')->with('success', 'Profile telah dikemaskini!');
+        } 
+        
     }
 
-    public function updatePassword(Request $request)
+    public function updatePassword(Request $request, User $user)
     {
             # Validation
             $request->validate([
@@ -67,8 +79,21 @@ class UserController extends Controller
             User::whereId(auth()->user()->id)->update([
                 'password' => Hash::make($request->new_password)
             ]);
+
+            if($user->choose_user_id == 1){
+                return redirect('/lagu')->with('success', 'Password telah ditukar!');
+            }
+            if($user->choose_user_id == 2){
+                return redirect('/lagu')->with('success', 'Password telah ditukar!');
+            }
+            if($user->choose_user_id == 3){
+                return redirect('/penilai-lagu')->with('success', 'Password telah ditukar!');
+            }
+            if($user->choose_user_id == 4){
+                return redirect('/pelulus-lagu')->with('success', 'Password telah ditukar!');
+            }
     
-            return redirect('/mainpage/songs')->with('success', 'Password telah ditukar!');
+            
     }
     
 }

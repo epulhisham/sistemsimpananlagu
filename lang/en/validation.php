@@ -91,7 +91,8 @@ return [
         'string' => 'The :attribute must not be greater than :max characters.',
     ],
     'max_digits' => 'The :attribute must not have more than :max digits.',
-    'mimes' => 'The :attribute must be a file of type: :values.',
+    // 'mimes' => 'The :attribute must be a file of type: :values.',
+    'mimes' => ':attribute mestilah jenis fail: :values.',
     'mimetypes' => 'The :attribute must be a file of type: :values.',
     'min' => [
         'array' => 'The :attribute must have at least :min items.',

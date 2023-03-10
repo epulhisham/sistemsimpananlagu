@@ -13,10 +13,11 @@ return new class extends Migration
      */
     public function up()
     {
-        Schema::create('penilais', function (Blueprint $table) {
+        Schema::create('downloads', function (Blueprint $table) {
             $table->id();
-            $table->foreignId('user_id');
-            $table->string('pilih_penilai');
+            $table->foreignId('user_id')->nullable();
+            $table->foreignId('song_id')->nullable();
+            $table->date('tarikh');
             $table->timestamps();
         });
     }
@@ -28,6 +29,6 @@ return new class extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('penilais');
+        Schema::dropIfExists('downloads');
     }
 };

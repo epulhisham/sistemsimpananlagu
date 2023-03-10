@@ -23,7 +23,7 @@ class User extends Authenticatable
     //     'email',
     //     'password',
     // ];
-    protected $guarded=['id'];
+    protected $guarded=['id,penilai_id'];
     /**
      * The attributes that should be hidden for serialization.
      *
@@ -47,7 +47,16 @@ class User extends Authenticatable
         return $this->hasMany(Song::class);
     }
 
+    public function download(){
+        return $this->hasMany(download::class);
+    }
+
+    public function penilai(){
+        return $this->hasOne(Penilai::class);
+    }
+
     public function choose_user(){
         return $this->belongsTo(Choose_user::class);
     }
+
 }

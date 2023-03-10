@@ -5,47 +5,129 @@
         <a href="javascript:void(0)" class="closebtn mx-3 link-dark text-decoration-none " onclick="closeNav()"><span data-feather="menu"></span></a>
       </li>
     </ul>
-    <a href="/mainpage/songs" class="d-flex align-items-center mt-3 mb-3 mb-md-0 me-md-auto link-dark text-decoration-none">
+    @can('pelulus')
+    <a href="/pelulus-lagu" class="d-flex align-items-center mt-3 mb-3 mb-md-0 me-md-auto link-dark text-decoration-none">
       <img class="" src="/img/rtm.png" alt="" width="110" height="70">  
       <span class="fw-bold px-3">Sistem Simpan Lagu</span>
-    </a>
+    </a> 
+    @endcan
+    @can('penilai')
+    <a href="/penilai-lagu" class="d-flex align-items-center mt-3 mb-3 mb-md-0 me-md-auto link-dark text-decoration-none">
+      <img class="" src="/img/rtm.png" alt="" width="110" height="70">  
+      <span class="fw-bold px-3">Sistem Simpan Lagu</span>
+    </a> 
+    @endcan
+    @can('syarikat_rakam')
+    <a href="/lagu" class="d-flex align-items-center mt-3 mb-3 mb-md-0 me-md-auto link-dark text-decoration-none">
+      <img class="" src="/img/rtm.png" alt="" width="110" height="70">  
+      <span class="fw-bold px-3">Sistem Simpan Lagu</span>
+    </a> 
+    @endcan
+    @can('syarikat_stesen')
+    <a href="/lagu" class="d-flex align-items-center mt-3 mb-3 mb-md-0 me-md-auto link-dark text-decoration-none">
+      <img class="" src="/img/rtm.png" alt="" width="110" height="70">  
+      <span class="fw-bold px-3">Sistem Simpan Lagu</span>
+    </a> 
+    @endcan
     <hr>
     <ul class="nav nav-pills flex-column mb-auto mt-3">
       <li class="nav-item">
-        <a class="nav-link {{ Request::is('mainpage/songs') ? 'active' : '' }} link-dark" aria-current="page" href="/mainpage/songs">
-          <span data-feather="home"></span>
-          Senarai Lagu
-        </a>
-        @can('pengguna')
-          <a class="nav-link {{ Request::is('dihantar/songs') ? 'active' : '' }} link-dark" aria-current="page" href="/dihantar/songs">
+        @can('pelulus')
+          <div class="dropdown">
+            <a class="nav-link dropdown-toggle link-dark" href="#" id="navbarDarkDropdownMenuLink" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+              <span data-feather="home"></span>
+              Senarai Lagu
+            </a>
+            <ul class="dropdown-menu text-small shadow" aria-labelledby="dropdownUser2">
+              <li>
+                <a class="dropdown-item" href="/pelulus-lagu">
+                  <span data-feather="file-text"></span>
+                  Senarai semua lagu
+                </a>
+              </li>
+              <li>
+                <a class="dropdown-item" href="/lagu-lulus">
+                  <span data-feather="check"></span>
+                  Lagu yang lulus
+                </a>
+              </li>
+              <li>
+                <a class="dropdown-item" href="/lagu-taklulus">
+                  <span data-feather="x"></span>
+                  Lagu yang tidak lulus
+                </a>
+              </li>
+            </ul>
+          </div>
+          <a class="nav-link {{ Request::is('/meluluskan') ? 'active' : '' }} link-dark" aria-current="page" href="/meluluskan">
+            <span data-feather="music"></span>
+            Meluluskan Lagu
+          </a>
+          <a class="nav-link {{ Request::is('/lagu-diterbit') ? 'active' : '' }} link-dark" aria-current="page" href="/lagu-diterbit">
+            <span data-feather="send"></span>
+            Lagu Diterbit
+          </a>
+          <a class="nav-link {{ Request::is('/statistik') ? 'active' : '' }} link-dark" aria-current="page" href="statistik">
+            <span data-feather="bar-chart-2"></span>
+            Statistik
+          </a>
+        @endcan
+        @can('penilai')
+          <div class="dropdown">
+            <a class="nav-link dropdown-toggle link-dark" href="#" id="navbarDarkDropdownMenuLink" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+              <span data-feather="home"></span>
+              Senarai Lagu
+            </a>
+            <ul class="dropdown-menu text-small shadow" aria-labelledby="dropdownUser2">
+              <li>
+                <a class="dropdown-item" href="/penilai-lagu">
+                  <span data-feather="file-text"></span>
+                  Senarai semua lagu
+                </a>
+              </li>
+              <li>
+                <a class="dropdown-item" href="/lagu-dinilai">
+                  <span data-feather="check"></span>
+                  Lagu yang dinilai
+                </a>
+              </li>
+              <li>
+                <a class="dropdown-item" href="/belum-dinilai">
+                  <span data-feather="x"></span>
+                  Lagu yang belum dinilai
+                </a>
+              </li>
+            </ul>
+          </div>
+        @endcan
+        @can('syarikat_rakam')
+          <a class="nav-link {{ Request::is('/lagu/create') ? 'active' : '' }} link-dark" aria-current="page" href="/lagu/create">
+            <span data-feather="file-plus"></span>
+            Hantar Lagu
+          </a>
+          <a class="nav-link {{ Request::is('/lagu') ? 'active' : '' }} link-dark" aria-current="page" href="/lagu">
             <span data-feather="music"></span>
             Lagu Dihantar
           </a>
         @endcan
-        @can('penilai')
-          <a class="nav-link {{ Request::is('menilai/songs') ? 'active' : '' }} link-dark" aria-current="page" href="/menilai/songs">
+        @can('syarikat_stesen')
+          <a class="nav-link {{ Request::is('/lagu/create') ? 'active' : '' }} link-dark" aria-current="page" href="/lagu/create">
+            <span data-feather="file-plus"></span>
+            Hantar Lagu
+          </a> 
+          <a class="nav-link {{ Request::is('/lagu') ? 'active' : '' }} link-dark" aria-current="page" href="/lagu">
             <span data-feather="music"></span>
-            Menilai Lagu
+            Lagu Dihantar
           </a>
+          <a class="nav-link {{ Request::is('/lagu-diterbit') ? 'active' : '' }} link-dark" aria-current="page" href="/lagu-diterbit">
+            <span data-feather="send"></span>
+            Lagu Diterbit
+          </a> 
         @endcan
-        @can('pelulus')
-          <a class="nav-link {{ Request::is('meluluskan/songs') ? 'active' : '' }} link-dark" aria-current="page" href="/meluluskan/songs">
-            <span data-feather="music"></span>
-            Meluluskan Lagu
-          </a>
-        @endcan
-        <a class="nav-link {{ Request::is('mainpage/songs/create') ? 'active' : '' }} link-dark" aria-current="page" href="/mainpage/songs/create">
-          <span data-feather="file-plus"></span>
-          Hantar Lagu
-        </a>
-        <a class="nav-link {{ Request::is('diterbit/songs') ? 'active' : '' }} link-dark" aria-current="page" href="/diterbit/songs">
-          <span data-feather="send"></span>
-          Lagu Diterbit
-        </a>
       </li>
     </ul>
     <hr>
-    <div class="dropdown">
+    <div class="dropdown px-3">
       <a class="nav-link dropdown-toggle link-dark" href="#" id="navbarDarkDropdownMenuLink" role="button" data-bs-toggle="dropdown" aria-expanded="false">
         <span data-feather="user"></span>
         Hai, {{ auth()->user()->name }}

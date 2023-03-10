@@ -32,23 +32,17 @@
             <input type="text" class="form-control" id="syarikat_rakaman" name="syarikat_rakaman" disabled required autofocus value="{{ old('syarikat_rakaman',$song->syarikat_rakaman) }}">
         </div>
         <div class="mb-3">
-            <label for="kategori_lagu" class="form-label">Kategori Lagu</label>
-            <input type="text" class="form-control" id="kategori_lagu" name="kategori_lagu" disabled required autofocus value="{{ old('kategori_lagu',$song->kategori_lagu) }}">
-        </div>
-        <div class="mb-3">
-            <label for="saiz" class="form-label">Saiz (MB)</label>
-            <input type="text" class="form-control" id="saiz" name="saiz" disabled required autofocus value="{{ old('saiz',$song->saiz) }}">
-        </div>
-        <div class="row">
-            <label for="masa" class="form-label">Masa (Duration)</label>
-            <div class="col-lg-3 mb-3">
-                <label for="masa_minit" class="form-label">Minit</label>
-                <input type="number" class="form-control" id="masa_minit" name="masa_minit" disabled autofocus value="{{ old('masa_minit',$song->masa_minit) }}">
-            </div>
-            <div class="col-lg-3 mb-3">
-                <label for="masa_saat" class="form-label">Saat</label>
-                <input type="number" class="form-control" id="masa_saat" name="masa_saat" disabled required autofocus value="{{ old('masa_saat',$song->masa_saat) }}">
-            </div>
+            <label for="song_category" class="form-label">Kategori Lagu</label>
+            <select class="form-select" name="song_category_id" disabled>
+                <option value="0">- Pilih -</option>
+                @foreach ($song_categories as $song_category )
+                    @if (old('song_category_id',$song->song_category->id) == $song_category->id)
+                        <option value="{{ $song_category->id }}" selected>{{ $song_category->kategori }}</option>
+                    @else
+                        <option value="{{ $song_category->id }}">{{ $song_category->kategori }}</option>
+                    @endif
+                @endforeach
+            </select>
         </div>
         <div class="mb-3">
             <label for="country" class="form-label">Negara</label>
@@ -68,9 +62,15 @@
             <textarea class="form-control" id="catatan" rows="3"  name="catatan" disabled required autofocus >{{ old('catatan',$song->catatan) }}</textarea>
         </div>
         <div class="mb-3">
+            <label for="lagu" class="form-label">Lagu</label>
+            <div class="row">
+                <audio controls src="{{ $song->lagu }}"></audio>
+            </div>
+        </div>
+        <div class="mb-3">
             <label for="fail_lagu" class="form-label">Fail Lagu</label>
             <div class="row">
-                <audio controls src="{{ $song->fail_lagu }}"></audio>
+                <a href="{{ $song->fail_lagu }}" class="badge bg-dark" target="_blank"><span data-feather="download" class="align-text-bottom"></span></a>
             </div>
         </div>
         <div class="mb-3">
@@ -82,19 +82,6 @@
                         <option value="{{ $status->id }}" selected>{{ $status->status_lagu }}</option>
                     @else
                         <option value="{{ $status->id }}">{{ $status->status_lagu }}</option>
-                    @endif
-                @endforeach
-            </select>
-        </div>
-        <div class="mb-3">
-            <label for="penilai" class="form-label">Pilih Penilai</label>
-            <select class="form-select" name="penilai_id" disabled>
-                <option value="0">- Pilih -</option>
-                @foreach ($penilais as $penilai )
-                    @if (old('penilai_id',$song->penilai->id) == $penilai->id)
-                        <option value="{{ $penilai->id }}" selected>{{ $penilai->pilih_penilai }}</option>
-                    @else
-                        <option value="{{ $penilai->id }}">{{ $penilai->pilih_penilai }}</option>
                     @endif
                 @endforeach
             </select>
@@ -140,56 +127,10 @@
                 </div>      
             @enderror
         </div>
-        <div class="mb-3 mt-5 border-bottom">
-            <label for="pelulus" class="fs-5 fw-bold">Bahagian Pelulus</label>
-        </div>
-        <div class="mb-3">
-            <label for="keputusan" class="form-label">Keputusan</label>
-            <select class="form-select" name="keputusan_id" disabled>
-                <option value="0">- Pilih -</option>
-                @foreach ($keputusans as $keputusan )
-                    @if (old('keputusan_id',$song->keputusan_id) == $keputusan->id)
-                        <option value="{{ $keputusan->id }}" selected>{{ $keputusan->pilih_keputusan }}</option>
-                    @else
-                        <option value="{{ $keputusan->id }}">{{ $keputusan->pilih_keputusan }}</option>
-                    @endif
-                @endforeach
-            </select>
-        </div>
-        <div class="mb-3">
-            <label for="terbit" class="form-label">Penerbitan Lagu</label>
-            <div class="form-check form-switch">
-                <input class="form-check-input" type="checkbox" id="{{ $song->terbit }}">
-                <label class="form-check-label" for="terbit">Lagu Diterbitkan</label>
-                @if (old('terbit',$song->terbit) == $song->terbit)    
-                @endif
-            </div>
-        </div>
-        <div class="mb-3">
-            <label for="tarikh_diluluskan" class="form-label">Tarikh Lagu Diluluskan</label>
-            <input type="date" class="form-control @error('tarikh_diluluskan') is-invalid @enderror" id="tarikh_diluluskan" name="tarikh_diluluskan" disabled value="{{ old('tarikh_diluluskan',$song->tarikh_diluluskan) }}">
-            @error('tarikh_diluluskan')
-                <div class="invalid-feedback">
-                    {{ $message }}
-                </div>      
-            @enderror
-        </div>
-        <a href="{{ url()->previous() }}" class="btn btn-dark link-light">
+        <a href="/pelulus-lagu" class="btn btn-dark link-light">
             <span data-feather="arrow-left"></span>
             Kembali
         </a>
-        <a href="/mainpage/songs/{{ $song->id }}/edit" class="btn btn-info link-light">
-            <span data-feather="edit"></span>
-            Kemaskini
-        </a>
-        <form action="/mainpage/songs/{{ $song->id }}" method="post" class="d-inline">
-            @method('delete')
-            @csrf
-            <button class="btn btn-danger border-0" onclick="return confirm('Are you sure?')">
-                <span data-feather="trash"></span>
-                Padam
-            </button>
-        </form>
     </div>
 
 

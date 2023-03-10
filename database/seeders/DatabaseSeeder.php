@@ -5,13 +5,11 @@ namespace Database\Seeders;
 // use Illuminate\Database\Console\Seeds\WithoutModelEvents;
 
 use App\Models\Choose_user;
-use App\Models\Song;
 use App\Models\Status;
 use App\Models\Country;
 use App\Models\Keputusan;
-use App\Models\Penilai;
-use App\Models\Result;
-use App\Models\statusLagu;
+use App\Models\Song_category;
+
 use Illuminate\Database\Seeder;
 
 class DatabaseSeeder extends Seeder
@@ -29,7 +27,6 @@ class DatabaseSeeder extends Seeder
         //     'name' => 'Test User',
         //     'email' => 'test@example.com',
         // ]);
-
         Status::create([
 
             'status_lagu' => 'Lagu Lengkap '
@@ -41,21 +38,15 @@ class DatabaseSeeder extends Seeder
             'status_lagu' => 'Lagu Tidak Lengkap '
         ]);
 
-        Penilai::create([
-
-            'pilih_penilai' => 'Admin Rakam Khanah'
-        ]);
-
-
-        Penilai::create([
-
-            'pilih_penilai' => 'Admin Panel Penilai '
-        ]);
-
         Choose_user::create([
 
-            'pilih_pengguna' => 'Pengguna'
+            'pilih_pengguna' => 'Syarikat Rakaman'
         ]);
+        Choose_user::create([
+
+            'pilih_pengguna' => 'Syarikat Stesen'
+        ]);
+        
         Choose_user::create([
 
             'pilih_pengguna' => 'Penilai'
@@ -82,6 +73,30 @@ class DatabaseSeeder extends Seeder
 
             'id'=>3,
             'pilih_keputusan' => 'Belum membuat keputusan'
+        ]);
+
+        Song_category::create([
+
+            'id'=> 1,
+            'kategori' => 'Melayu'
+        ]);
+
+        Song_category::create([
+
+            'id'=> 2,
+            'kategori' => 'Inggeris'
+        ]);
+
+        Song_category::create([
+
+            'id'=> 3,
+            'kategori' => 'Mandarin'
+        ]);
+
+        Song_category::create([
+
+            'id'=> 4,
+            'kategori' => 'Tamil'
         ]);
 
         $countries = [

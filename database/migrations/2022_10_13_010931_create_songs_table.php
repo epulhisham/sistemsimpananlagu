@@ -19,18 +19,16 @@ return new class extends Migration
             $table->foreignId('penilai_id')->nullable();
             $table->foreignId('status_id')->nullable();
             $table->foreignId('country_id')->nullable();
-            $table->foreignId('keputusan_id')->nullable();
+            $table->foreignId('keputusan_id')->default(3);
+            $table->foreignId('song_category_id')->nullable();
             $table->string('artis');
             $table->string('tajuk');
             $table->string('album');
             $table->string('pencipta_lagu');
             $table->string('penulis_lirik');
             $table->string('syarikat_rakaman');
-            $table->string('kategori_lagu');
-            $table->string('saiz');
-            $table->integer('masa_minit');
-            $table->integer('masa_saat');
             $table->string('catatan');
+            $table->string('lagu');
             $table->string('fail_lagu');
             $table->date('tarikh_diterima')->nullable();
             $table->date('tarikh_dinilai')->nullable();
@@ -41,6 +39,7 @@ return new class extends Migration
             $table->string('muzik')->nullable();
             $table->string('penerbitan_teknikal')->nullable();
             $table->boolean('terbit')->default(false);
+            $table->integer('downloadCount')->default(0);
             $table->timestamps();
         });
     }

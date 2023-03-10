@@ -7,14 +7,14 @@
     </div>
 
     <div class="col-lg-8">
-        <form method="post" action="/mainpage/songs" class="mb-5" enctype="multipart/form-data">
+        <form method="post" action="/lagu" class="mb-5" enctype="multipart/form-data">
             @csrf
             <div class="mb-3">
                 <label for="artis" class="form-label">Artis</label>
                 <input type="text" class="form-control @error('artis') is-invalid @enderror" id="artis" name="artis" required autofocus value="{{ old('artis') }}">
                 @error('artis')
                     <div class="invalid-feedback">
-                        {{ $message }}
+                        {{ "$message" }}
                     </div>      
                 @enderror
             </div>
@@ -64,48 +64,27 @@
                 @enderror
             </div>
             <div class="mb-3">
-                <label for="kategori_lagu" class="form-label">Kategori Lagu</label>
-                <input type="text" class="form-control @error('kategori_lagu') is-invalid @enderror" id="kategori_lagu" name="kategori_lagu" required autofocus value="{{ old('kategori_lagu') }}">
-                @error('kategori_lagu')
-                    <div class="invalid-feedback">
-                        {{ $message }}
+                <label for="song_category" class="form-label">Kategori Lagu</label>
+                <select class="form-select @error('song_category_id') is-invalid @enderror" name="song_category_id">
+                    <option value="0">- Pilih -</option>
+                    @foreach ($song_categories as $song_category )
+                        @if (old('song_category_id') == $song_category->id)
+                            <option value="{{ $song_category->id }}" selected>{{ $song_category->kategori }}</option>
+                        @else
+                            <option value="{{ $song_category->id }}">{{ $song_category->kategori }}</option>
+                        @endif
+                    @endforeach
+                </select>
+                @error('song_category_id')
+                    <div class="invalid-feedback" role="alert">
+                        {{ "Sila Pilih Kategori Lagu" }}
                     </div>      
                 @enderror
-            </div>
-            <div class="mb-3">
-                <label for="saiz" class="form-label">Saiz (MB)</label>
-                <input type="text" class="form-control @error('saiz') is-invalid @enderror" id="saiz" name="saiz" required autofocus value="{{ old('saiz') }}">
-                @error('saiz')
-                    <div class="invalid-feedback">
-                        {{ $message }}
-                    </div>      
-                @enderror
-            </div>
-            <div class="row">
-                <label for="masa" class="form-label">Masa (Duration)</label>
-                <div class="col-lg-3 mb-3">
-                    <label for="masa_minit" class="form-label">Minit</label>
-                    <input type="number" class="form-control @error('masa_minit') is-invalid @enderror" id="masa_minit" name="masa_minit" required autofocus value="{{ old('masa_minit') }}">
-                    @error('masa_minit')
-                        <div class="invalid-feedback">
-                            {{ $message }}
-                        </div>      
-                    @enderror
-                </div>
-                <div class="col-lg-3 mb-3">
-                    <label for="masa_saat" class="form-label">Saat</label>
-                    <input type="number" class="form-control @error('masa_saat') is-invalid @enderror" id="masa_saat" name="masa_saat" required autofocus value="{{ old('masa_saat') }}">
-                    @error('masa_saat')
-                        <div class="invalid-feedback">
-                            {{ $message }}
-                        </div>      
-                    @enderror
-                </div>
             </div>
             <div class="mb-3">
                 <label for="country" class="form-label">Negara</label>
-                <select class="form-select" name="country_id">
-                    <option selected>- Pilih -</option>
+                <select class="form-select @error('country_id') is-invalid @enderror"" name="country_id">
+                    <option value="0">- Pilih -</option>
                     @foreach ($countries as $country )
                         @if (old('country_id') == $country->id)
                             <option value="{{ $country->id }}" selected>{{ $country->name }}</option>
@@ -114,6 +93,11 @@
                         @endif
                     @endforeach
                 </select>
+                @error('country_id')
+                    <div class="invalid-feedback" role="alert">
+                        {{ "Sila Pilih Negara" }}
+                    </div>      
+                @enderror
             </div>
             <div class="mb-3">
                 <label for="catatan" class="form-label">Catatan</label>
@@ -126,9 +110,20 @@
             </div>
             <div class="mb-3">
                 <div class="mb-3">
+                    <label for="lagu" class="form-label">Lagu</label>
+                    <input class="form-control @error('lagu') is-invalid @enderror" type="file" id="lagu" name="lagu" multiple>
+                    @error('lagu')
+                    <div class="invalid-feedback">
+                        {{ $message }}
+                    </div>      
+                    @enderror
+                </div>
+            </div>
+            <div class="mb-3">
+                <div class="mb-3">
                     <label for="fail_lagu" class="form-label">Fail Lagu</label>
                     <input class="form-control @error('fail_lagu') is-invalid @enderror" type="file" id="fail_lagu" name="fail_lagu" multiple>
-                    @error('image')
+                    @error('fail_lagu')
                     <div class="invalid-feedback">
                         {{ $message }}
                     </div>      
@@ -137,8 +132,8 @@
             </div>
             <div class="mb-3">
                 <label for="status" class="form-label">Status Lagu</label>
-                <select class="form-select" name="status_id">
-                    <option selected>- Pilih -</option>
+                <select class="form-select @error('status_id') is-invalid @enderror" name="status_id">
+                    <option value="0">- Pilih -</option>
                     @foreach ($statuses as $status )
                         @if (old('status_id') == $status->id)
                             <option value="{{ $status->id }}" selected>{{ $status->status_lagu }}</option>
@@ -147,19 +142,11 @@
                         @endif
                     @endforeach
                 </select>
-            </div>
-            <div class="mb-3">
-                <label for="penilai" class="form-label">Pilih Penilai</label>
-                <select class="form-select" name="penilai_id">
-                    <option selected>- Pilih -</option>
-                    @foreach ($penilais as $penilai )
-                        @if (old('penilai_id') == $penilai->id)
-                            <option value="{{ $penilai->id }}" selected>{{ $penilai->pilih_penilai }}</option>
-                        @else
-                            <option value="{{ $penilai->id }}">{{ $penilai->pilih_penilai }}</option>
-                        @endif
-                    @endforeach
-                </select>
+                @error('status_id')
+                <div class="invalid-feedback">
+                    {{ "Sila pilih Status Lagu" }}
+                </div>      
+                @enderror
             </div>
             <div class="mb-3">
                 <label for="tarikh_diterima" class="form-label">Tarikh Lagu Diterima</label>
@@ -172,6 +159,9 @@
             </div>
 
             <button type="submit" class="btn btn-dark">Hantar Lagu</button>
+            <a href="/lagu" class="btn btn-danger border-0" onclick="return confirm('Adakah anda pasti untuk batal?')">
+                Batal
+            </a>
         </form>
     </div>
 

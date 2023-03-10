@@ -10,8 +10,13 @@ class Song extends Model
 {
     use HasFactory;
 
-    protected $guarded = ['id,user_id,status_id,penilai_id,country_id,keputusan_id'];
+    protected $guarded = ['id,user_id,status_id,penilai_id,country_id,keputusan_id, song_category_id'];
     protected $casts = ['terbit' => 'boolean'];
+
+    public function download ()
+    {
+        return $this->hasMany(Download::class);
+    }
 
     public function user ()
     {
@@ -22,9 +27,9 @@ class Song extends Model
         return $this->belongsTo(Status::class);
     }
 
-    public function Penilai ()
+    public function penilai ()
     {
-        return $this->belongsTo(Penilai::class);
+        return $this->belongsTo(Penilai::class,'penilai_id');
     }
 
     public function country ()
@@ -35,5 +40,10 @@ class Song extends Model
     public function keputusan()
     {
         return $this->belongsTo(Keputusan::class,'keputusan_id');
+    }
+
+    public function song_category()
+    {
+        return $this->belongsTo(Song_category::class,'song_category_id');
     }
 }

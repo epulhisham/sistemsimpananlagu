@@ -13,10 +13,9 @@ return new class extends Migration
      */
     public function up()
     {
-        Schema::create('penilais', function (Blueprint $table) {
+        Schema::create('song_categories', function (Blueprint $table) {
             $table->id();
-            $table->foreignId('user_id');
-            $table->string('pilih_penilai');
+            $table->string('kategori');
             $table->timestamps();
         });
     }
@@ -28,6 +27,6 @@ return new class extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('penilais');
+        Schema::dropIfExists('song_categories');
     }
 };

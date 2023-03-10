@@ -2,8 +2,9 @@
 
 @section('container')
 
+@can('penilai')
 <div class="justify-content-between flex-wrap flex-md-nowrap align-items-center pt-3 pb-2 mb-3 border-bottom">
-    <h1 class="h2">Senarai Lagu</h1>
+<h1 class="h2">Senarai lagu yang telah dinilai</h1>
 </div>
 
 @if (session()->has('success'))
@@ -12,9 +13,10 @@
 </div>
 @endif
 
+
 <div class="row">
     <div class="col-md-6">
-        <form action="/diterbit/songs">
+        <form action="">
             <div class="input-group mb-3">
                 <input type="text" class="form-control" placeholder="Search" name="search" value="{{ request('search') }}">
                 <button class="btn btn-dark" type="submit">Cari</button>
@@ -23,16 +25,17 @@
     </div>
 </div>
 
-<div class="table-responsive col-md-10">
+<div class="table-responsive col-lg-10">
     <table class="table table-bordered">
         <thead>
             <tr>
             <th scope="col">Bil.</th>
             <th scope="col">Artis</th>
             <th scope="col">Tajuk</th>
-            <th scope="col">Fail Lagu</th>
+            <th scope="col">Lagu</th>
             <th scope="col">Tindakan</th>
-            <th scope="col">Daripada</th>
+            <th scope="col">Nama Penilai</th>
+            <th scope="col">Nota</th>
             </tr>
         </thead>
         <tbody>
@@ -42,24 +45,30 @@
                 <td>{{ $song->artis }}</td>
                 <td>{{ $song->tajuk }}</td>
                 <td>
-                    <audio controls src="{{ $song->fail_lagu }}"></audio>
+                    <audio controls src="{{ $song->lagu }}"></audio>
                 </td>
                 <td>
-                    <a href="/mainpage/songs/{{ $song->id }}" class="badge bg-success link-light">
+                    <a href="/penilai-lagu/{{ $song->id }}" class="badge bg-success link-light">
                         <span data-feather="file-text" class="align-text-bottom"></span>
                     </a>
-                    <a href="/mainpage/songs/{{ $song->id }}/edit" class="badge bg-info link-light">
+                    <a href="/penilai-lagu/{{ $song->id }}/edit" class="badge bg-info link-light">
                         <span data-feather="edit" class="align-text-bottom"></span>
                     </a>
-                    <form action="/mainpage/songs/{{ $song->id }}" method="post" class="d-inline">
-                        @method('delete')
-                        @csrf
-                        <button class="badge bg-danger border-0" onclick="return confirm('Are you sure?')">
-                            <span data-feather="trash" class="align-text-bottom"></span>
-                        </button>
-                    </form>
                 </td>
-                <td>{{ $song->user->name }}</td>
+                <td>
+                    @if ( $song->penilai_id == null)
+                        Belum dipilih
+                    @else
+                        {{ $song->penilai->pilih_penilai}}
+                    @endif
+                </td>
+                <td>
+                    @if ($song->tarikh_dinilai == null)
+                        Belum dinilai
+                    @else
+                        Telah dinilai
+                    @endif
+                </td>
                 </tr>
             @endforeach
         </tbody>
@@ -68,10 +77,7 @@
         {{ $songs->links() }}
     </div>
 </div>
-
-
-
-
+@endcan
 
 
 

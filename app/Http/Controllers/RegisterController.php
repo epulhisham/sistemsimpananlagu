@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\Choose_user;
+use App\Models\Penilai;
 use App\Models\User;
 use Illuminate\Http\Request;
 
@@ -28,7 +29,15 @@ class RegisterController extends Controller
 
         $validatedData['password'] = bcrypt($validatedData['password']);
 
-        User::create($validatedData);
+        $user = User::create($validatedData);
+        
+        if ($user->choose_user_id == 3) {
+            Penilai::create([
+                "user_id" => $user->id,
+                "pilih_penilai" => $user->name
+            ]);
+        }
+        
 
         return redirect('/login')->with('success','Pendaftaran akaun berhasil! Sila Log Masuk');
     }

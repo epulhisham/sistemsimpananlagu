@@ -10,6 +10,8 @@
         "laravel/framework": "^9.19",
         "laravel/sanctum": "^3.0",
         "laravel/tinker": "^2.7",
+        "league/flysystem-aws-s3-v3": "^3.12",
+        "sunra/php-simple-html-dom-parser": "^1.5",
         "wapmorgan/mp3info": "^0.0.8"
     },
     "require-dev": {

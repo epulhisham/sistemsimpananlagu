@@ -28,19 +28,25 @@ class AppServiceProvider extends ServiceProvider
     {
         Paginator::useBootstrapFive();
 
-        Gate::define('penilai', function(User $user){
+        Gate::define('syarikat_rakam', function(User $user){
+
+            return $user->choose_user_id === 1;
+        });
+        Gate::define('syarikat_stesen', function(User $user){
 
             return $user->choose_user_id === 2;
         });
-
-        Gate::define('pelulus', function(User $user){
+        
+        Gate::define('penilai', function(User $user){
 
             return $user->choose_user_id === 3;
         });
 
-        Gate::define('pengguna', function(User $user){
+        Gate::define('pelulus', function(User $user){
 
-            return $user->choose_user_id === 1;
+            return $user->choose_user_id === 4;
         });
+
+
     }
 }
