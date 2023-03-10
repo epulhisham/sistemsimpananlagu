@@ -139,7 +139,7 @@
         const data = {
             labels: labels,
             datasets: [{
-                label: 'Jumlah Lagu Dihantar',
+                label: 'Jumlah Lagu',
                 backgroundColor: 'rgb(255, 99, 132)',
                 borderColor: 'rgb(255, 99, 132)',
                 data: users,
