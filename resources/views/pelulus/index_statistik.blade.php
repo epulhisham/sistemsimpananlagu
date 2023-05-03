@@ -3,7 +3,13 @@
 @section('container')
 
 <head>
-    <link href="https://fonts.googleapis.com/css2?family=Barlow:wght@200;300;400;500&family=Inter:wght@100;200;300;400;500;600;700;800;900&family=Kodchasan:ital,wght@0,300;1,200;1,300&family=Montserrat:ital,wght@0,200;0,300;0,800;1,200;1,300;1,400;1,500;1,600;1,700&family=Noto+Sans:ital,wght@0,400;0,700;1,400;1,700&family=Parisienne&family=Playball&family=Poppins:ital,wght@0,100;0,200;0,300;0,800;0,900;1,100;1,200;1,300&family=Roboto+Condensed:wght@300;400;700&family=Roboto+Mono:ital,wght@0,100;1,100&family=Roboto:ital,wght@0,100;0,300;1,100&family=Rubik+Beastly&family=Teko:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Barlow:wght@200;300;400;500&family=Inter:wght@100;200;300;
+    400;500;600;700;800;900&family=Kodchasan:ital,wght@0,300;1,200;1,300&family=Montserrat:ital,wght@0,200;0,300;0,
+    800;1,200;1,300;1,400;1,500;1,600;1,700&family=Noto+Sans:ital,wght@0,400;0,700;1,400;1,700&family=Parisienne&family
+    =Playball&family=Poppins:ital,wght@0,100;0,200;0,300;0,800;0,900;1,100;1,200;1,300&family=Roboto+Condensed:wght@300;
+    400;700&family=Roboto+Mono:ital,wght@0,100;1,100&family=Roboto:ital,wght@0,100;0,300;1,100&family=Rubik+Beastly&family
+    =Teko:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.17.1/xlsx.full.min.js"></script>
 </head>
 
 <div class="justify-content-between flex-wrap flex-md-nowrap align-items-center pt-3 pb-2 mb-3 border-bottom">
@@ -11,152 +17,115 @@
 </div>
 
 <div class="row">
-    <div class="col-xl-3 col-md-6 mb-4">
-        <div class="card border-left-primary shadow h-100 py-2 bg-dark">
-            <div class="card-body">
-                <div class="row no-gutters align-items-center">
-                    <div class="col mr-2">
-                        <div class="text-xs font-weight-bold text-white text-uppercase mb-1">
-                            Jumlah lagu dihantar</div>
-                        <div class="h5 mb-0 font-weight-bold text-white">{{ $songs }}</div>
-                    </div>
-                    <div class="col-auto text-white">
-                        <span data-feather="upload"></span>
-                    </div>
-                </div>
+    <div class="col-md-6">
+        <form action="/statistik">
+            <div class="input-group mb-3">
+                <input type="text" class="form-control" placeholder="Search" name="search" value="{{ request('search') }}">
+                <input type="date" class="form-control" id="startDate" name="startDate" value="{{ request('startDate') }}" >
+                <input type="date" class="form-control" id="endDate" name="endDate" value="{{ request('endDate') }}">
+                <button class="btn btn-dark" type="submit">Cari</button>
+                <button class="btn btn-success" onclick="window.print()">Print</button>
             </div>
-        </div>
+        </form>
     </div>
+</div>
 
-    <div class="col-xl-3 col-md-6 mb-4">
-        <div class="card border-left-primary shadow h-100 py-2 bg-primary">
-            <div class="card-body">
-                <div class="row no-gutters align-items-center">
-                    <div class="col mr-2">
-                        <div class="text-xs font-weight-bold text-white text-uppercase mb-1">
-                            Jumlah lagu dimuat turun</div>
-                        <div class="h5 mb-0 font-weight-bold text-white">{{ $downloadCount }}</div>
-                    </div>
-                    <div class="col-auto text-white">
-                        <span data-feather="download"></span>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </div>
-
-    <!-- Earnings (Monthly) Card Example -->
-    <div class="col-xl-3 col-md-6 mb-4">
-        <div class="card border-left-success shadow h-100 py-2 bg-info">
-            <div class="card-body">
-                <div class="row no-gutters align-items-center">
-                    <div class="col mr-2">
-                        <div class="text-xs font-weight-bold text-white text-uppercase mb-1">
-                            Jumlah Pengguna (Syarikat Rakaman)</div>
-                        <div class="h5 mb-0 font-weight-bold text-white">{{ $syarikat_rakaman }}</div>
-                    </div>
-                    <div class="col-auto text-white">
-                        <span data-feather="user"></span>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </div>
-
-    <div class="col-xl-3 col-md-6 mb-4">
-        <div class="card border-left-success shadow h-100 py-2 bg-warning">
-            <div class="card-body">
-                <div class="row no-gutters align-items-center">
-                    <div class="col mr-2">
-                        <div class="text-xs font-weight-bold text-white text-uppercase mb-1">
-                            Jumlah Pengguna (Syarikat Stesen)</div>
-                        <div class="h5 mb-0 font-weight-bold text-white">{{ $syarikat_stesen }}</div>
-                    </div>
-                    <div class="col-auto text-white">
-                        <span data-feather="user"></span>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </div>
-
-    <div class="col-xl-3 col-md-6 mb-4">
-        <div class="card border-left-success shadow h-100 py-2 bg-success">
-            <div class="card-body">
-                <div class="row no-gutters align-items-center">
-                    <div class="col mr-2">
-                        <div class="text-xs font-weight-bold text-white text-uppercase mb-1">
-                            Jumlah Penilai</div>
-                        <div class="h5 mb-0 font-weight-bold text-white">{{ $penilai }}</div>
-                    </div>
-                    <div class="col-auto text-white">
-                        <span data-feather="user"></span>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </div>
-
+@if (count($downloads) > 0)
     <div class="row">
-        <div class="col-md-6">
-            <canvas id="myChart" height="100px"></canvas>
+        <div class="col-md-5">
+            <canvas id="myChart"></canvas>
         </div>
-        <div class="col-md-6">
-            <div class="table-responsive-sm col-md-12">
-                <table class="table table-bordered">
-                    <thead>
+    </div>
+    <div class="row mt-3">
+        <div class="table-responsive-lg col-md-8">
+            <table class="table table-bordered">
+                <thead>
+                    <tr>
+                    <th scope="col">Bil.</th>
+                    <th scope="col">Pengguna</th>
+                    <th scope="col">Tajuk Lagu</th>
+                    <th scope="col">Tarikh</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @foreach ($downloads as $download )
                         <tr>
-                        <th scope="col">Bil.</th>
-                        <th scope="col">Tajuk</th>
-                        <th scope="col">Jumlah Muat Turun</th>
+                        <td>{{ $downloads->firstItem() + $loop->index }}</td>
+                        <td>{{ $download->user->name}}</td>
+                        <td>{{ $download->song->tajuk}}</td>
+                        <td>{{ $download->created_at }}</td> 
                         </tr>
-                    </thead>
-                    <tbody>
-                        @foreach ($songs1 as $song1 )
-                            <tr>
-                            <td>{{ $loop->iteration }}</td>
-                            <td>{{ $song1->tajuk }}</td>
-                            <td>{{ $song1->downloadCount }}</td>
-                            </tr>
-                        @endforeach
-                    </tbody>
-                </table>
-                <div class="d-flex justify-content-end">
-                    {{ $songs1->links() }}
-                </div>
+                    @endforeach
+                </tbody>
+            </table>
+            <div class="d-flex justify-content-end">
+                {{ $downloads->links() }}
             </div>
         </div>
     </div>
+@else
+    <div class="table-responsive-lg col-md-8">
+        <table class="table table-bordered">
+            <thead>
+                <tr>
+                    <th scope="col">Bil.</th>
+                    <th scope="col">Pengguna</th>
+                    <th scope="col">Tajuk Lagu</th>
+                    <th scope="col">Tarikh</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td colspan="4" class="text-center">Tiada Maklumat.</td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+@endif
 
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.0/jquery.min.js" ></script>
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
       
     <script type="text/javascript">
-      
-        var labels =  {{ Js::from($labels) }};
-        var users =  {{ Js::from($data) }};
-      
+
+    var labels = {{ Js::from($labels) }};
+    var users = {{ Js::from($data) }};
+        var colors = ["#FF6384", "#36A2EB", "#FFCE56", "#4BC0C0", "#9966FF", "#FDB45C", "#46BFBD", "#F7464A", "#949FB1", "#87CEEB"];
+    
         const data = {
             labels: labels,
             datasets: [{
-                label: 'Jumlah Lagu',
-                backgroundColor: 'rgb(255, 99, 132)',
-                borderColor: 'rgb(255, 99, 132)',
+                label: 'Jumlah lagu dimuat turun',
+                backgroundColor: colors.slice(0, labels.length),
+                borderColor: colors.slice(0, labels.length),
+                borderWidth: 1,
                 data: users,
             }]
         };
-      
+    
         const config = {
-            type: 'line',
+            type: 'bar',
             data: data,
-            options: {}
+            options:{
+                scales: {
+                    y: {
+                        beginAtZero: true
+                    }
+                },
+                plugins: {
+                    legend: {
+                        position: 'top'
+                    }
+                },
+                barThickness: 100
+            }
         };
-      
+    
         const myChart = new Chart(
             document.getElementById('myChart'),
             config
         );
-      
-</script>   
+    
+    </script>
 
 @endsection

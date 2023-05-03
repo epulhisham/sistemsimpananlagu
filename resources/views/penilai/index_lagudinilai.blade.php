@@ -16,7 +16,7 @@
 
 <div class="row">
     <div class="col-md-6">
-        <form action="">
+        <form action="/lagu-dinilai">
             <div class="input-group mb-3">
                 <input type="text" class="form-control" placeholder="Search" name="search" value="{{ request('search') }}">
                 <button class="btn btn-dark" type="submit">Cari</button>
@@ -26,47 +26,50 @@
 </div>
 
 <div class="table-responsive col-lg-10">
-    <table class="table table-bordered">
-        <thead>
-            <tr>
-            <th scope="col">Bil.</th>
-            <th scope="col">Artis</th>
-            <th scope="col">Tajuk</th>
-            <th scope="col">Lagu</th>
-            <th scope="col">Tindakan</th>
-            <th scope="col">Nama Penilai</th>
-            <th scope="col">Nota</th>
-            </tr>
-        </thead>
-        <tbody>
-            @foreach ($songs as $song )
+    @if (count($songs) > 0)
+        <table class="table table-bordered">
+            <thead>
                 <tr>
-                <td>{{ $loop->iteration }}</td>
+                <th scope="col">Bil.</th>
+                <th scope="col">Artis</th>
+                <th scope="col">Tajuk</th>
+                <th scope="col">Lagu</th>
+                <th scope="col">Tindakan</th>
+                <th scope="col">Penilaian</th>
+                <th scope="col">Keputusan</th>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach ($songs as $song )
+                <tr>
+                <td>{{ $songs->firstItem() + $loop->index }}</td>
                 <td>{{ $song->artis }}</td>
                 <td>{{ $song->tajuk }}</td>
                 <td>
                     <audio controls src="{{ $song->lagu }}"></audio>
                 </td>
                 <td>
-                    <a href="/penilai-lagu/{{ $song->id }}" class="badge bg-success link-light">
-                        <span data-feather="file-text" class="align-text-bottom"></span>
-                    </a>
-                    <a href="/penilai-lagu/{{ $song->id }}/edit" class="badge bg-info link-light">
-                        <span data-feather="edit" class="align-text-bottom"></span>
-                    </a>
-                </td>
-                <td>
-                    @if ( $song->penilai_id == null)
-                        Belum dipilih
-                    @else
-                        {{ $song->penilai->pilih_penilai}}
-                    @endif
+                    <div class="d-flex align-item-center">
+                        <a href="/penilai-lagu/{{ $song->id }}" class="badge bg-success link-light mx-1">
+                            <span data-feather="file-text" class="align-text-bottom"></span>
+                        </a>
+                        <a href="/penilai-lagu/{{ $song->id }}/edit" class="badge bg-info link-light mx-1">
+                            <span data-feather="edit" class="align-text-bottom"></span>
+                        </a>
+                    </div>
                 </td>
                 <td>
                     @if ($song->tarikh_dinilai == null)
                         Belum dinilai
                     @else
                         Telah dinilai
+                    @endif
+                </td>
+                <td>
+                    @if ($song->keputusan_id > 0)
+                        {{ $song->keputusan->pilih_keputusan }}
+                    @else
+                        Belum membuat keputusan
                     @endif
                 </td>
                 </tr>
@@ -76,6 +79,24 @@
     <div class="d-flex justify-content-end">
         {{ $songs->links() }}
     </div>
+    @else
+        <table class="table table-bordered">
+            <thead>
+                <tr>
+                <th scope="col">Bil.</th>
+                <th scope="col">Artis</th>
+                <th scope="col">Tajuk</th>
+                <th scope="col">Lagu</th>
+                <th scope="col">Tindakan</th>
+                <th scope="col">Penilaian</th>
+                <th scope="col">Keputusan</th>
+                </tr>
+            </thead>
+            <tr>
+                <td class="text-center" colspan="7">Tiada Maklumat.</td>
+            </tr>
+        </table>
+    @endif
 </div>
 @endcan
 

@@ -24,13 +24,14 @@ class LaguController extends Controller
         $songs = Song::where('user_id',auth()->user()->id)->orderby('created_at','desc');
 
         if(request('search')){
-
-            $songs->where('artis', 'like', '%' . request('search') . '%')
-                ->orWhere('tajuk', 'like', '%' . request('search') . '%')
-                ->orWhere('album', 'like', '%' . request('search') . '%')
-                ->orWhere('pencipta_lagu', 'like', '%' . request('search') . '%')
-                ->orWhere('penulis_lirik', 'like', '%' . request('search') . '%')
-                ->orWhere('syarikat_rakaman', 'like', '%' . request('search') . '%');
+            $songs->where(function ($query) {
+                $query->where('artis', 'like', '%' . request('search') . '%')
+                    ->orWhere('tajuk', 'like', '%' . request('search') . '%')
+                    ->orWhere('album', 'like', '%' . request('search') . '%')
+                    ->orWhere('pencipta_lagu', 'like', '%' . request('search') . '%')
+                    ->orWhere('penulis_lirik', 'like', '%' . request('search') . '%')
+                    ->orWhere('syarikat_rakaman', 'like', '%' . request('search') . '%');
+            });
         }
         
 
@@ -79,10 +80,9 @@ class LaguController extends Controller
             'syarikat_rakaman' => 'required|max:255',
             'song_category_id' => 'required|not_in:0',
             'country_id' => 'required|not_in:0',
-            'catatan' => 'required|max:255',
+            'catatan' => 'max:255',
             'lagu'=>'required|mimes:audio/mpeg,mpga,mp3,wav,aac',
-            'fail_lagu'=>'required|mimes:pdf,docx',
-            'status_id' => 'required|not_in:0',
+            'fail_lagu'=>'mimes:pdf,docx',
             'tarikh_diterima' => '',
             'tarikh_dinilai' => '',
             'tarikh_diluluskan' => '',      
@@ -100,13 +100,10 @@ class LaguController extends Controller
             $filename = pathinfo($filenameWithExt, PATHINFO_FILENAME);
             $extension = $request->lagu->getClientOriginalExtension();
             $fileNameToStore = $filename . '_' . time() . '.' . $extension;
-            // dd($fileNameToStore);
             $filePath = 'public/songs/'.$fileNameToStore;
-            // $validatedData['lagu'] = $request->file('lagu')->put('songs');
             $toLocalStorage = $request->lagu->storeAs('public/songs/', $fileNameToStore);
             echo $toLocalStorage;
             $validatedData['lagu'] = 'https://d38gy8luw6hjwu.cloudfront.net/' . $filePath;
-            // $validatedData['lagu'] = '/storage/songs/' . $fileNameToStore;
         }
 
         if($request->file('fail_lagu')){
@@ -114,9 +111,7 @@ class LaguController extends Controller
             $filename = pathinfo($filenameWithExt, PATHINFO_FILENAME);
             $extension = $request->fail_lagu->getClientOriginalExtension();
             $fileNameToStore = $filename . '_' . time() . '.' . $extension;
-            // dd($fileNameToStore);
             $filePath = 'public/files/'.$fileNameToStore;
-            // $validatedData['fail_lagu'] = $request->file('fail_lagu')->put('songs');
             $toLocalStorage = $request->fail_lagu->storeAs('public/files/', $fileNameToStore);
             echo $toLocalStorage;
             // $validatedData['fail_lagu'] = '/storage/files/' . $fileNameToStore;
@@ -140,7 +135,6 @@ class LaguController extends Controller
      */
     public function show(Song $lagu)
     {
-        // dd($lagu);
         return view('lagu.show',[
 
             "song" =>$lagu,
@@ -192,10 +186,9 @@ class LaguController extends Controller
             'syarikat_rakaman' => 'required|max:255',
             'song_category_id' => 'not_in:0',
             'country_id' => 'not_in:0',
-            'catatan' => 'required|max:255',
+            'catatan' => 'max:255',
             'lagu'=>'mimes:audio/mpeg,mpga,mp3,wav,aac',
-            'fail_lagu'=>'mimes:pdf,docx',
-            'status_id' => 'not_in:0',   
+            'fail_lagu'=>'mimes:pdf,docx',   
             'tarikh_diterima' => '',
             'tarikh_dinilai' => '',
             'tarikh_diluluskan' => '',   
@@ -254,7 +247,7 @@ class LaguController extends Controller
 
         Song::where('id', $lagu->id)->update($validatedData);
 
-        return redirect('/lagu')->with('success', 'Lagu telah dikemaskini!');
+        return redirect('/pelulus-lagu')->with('success', 'Lagu telah dikemaskini!');
     }
 
     /**
@@ -276,7 +269,7 @@ class LaguController extends Controller
         }
 
         Song::destroy($lagu->id);
-        return redirect('/lagu')->withErrors($lagu)->withInput()->with('success', 'Lagu telah dipadam!');
+        return redirect('/pelulus-lagu')->withErrors($lagu)->withInput()->with('success', 'Lagu telah dipadam!');
 
     }
 }

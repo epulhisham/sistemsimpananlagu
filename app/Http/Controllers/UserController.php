@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\User;
 use App\Models\Choose_user;
+use App\Models\Penilai;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Hash;
 
@@ -40,10 +41,21 @@ class UserController extends Controller
 
             $rules['email'] = 'required|email|unique:users';
         }
+        
+        if($request->phone_number != auth()->user()->phone_number){
+
+            $rules['phone_number'] = 'required|unique:users|regex:/^[0-9]{10,11}$/';
+        }
 
         $validatedData = $request->validate($rules);
 
         User::where('id', auth()->user()->id)->update($validatedData);
+
+        $penilai = Penilai::where('user_id', $user->id)->first();
+        if ($penilai) {
+            $penilai->pilih_penilai = $validatedData['name'];
+            $penilai->save();
+        }
 
         if($user->choose_user_id == 1){
             return redirect('/lagu')->with('success', 'Profile telah dikemaskini!');
@@ -65,7 +77,7 @@ class UserController extends Controller
             # Validation
             $request->validate([
                 'old_password' => 'required',
-                'new_password' => 'required|confirmed',
+                'new_password' => 'required|min:5|max:255|confirmed',
             ]);
     
     
@@ -91,6 +103,9 @@ class UserController extends Controller
             }
             if($user->choose_user_id == 4){
                 return redirect('/pelulus-lagu')->with('success', 'Password telah ditukar!');
+            }
+            if($user->choose_user_id == 5){
+                return redirect('/admin')->with('success', 'Password telah ditukar!');
             }
     
             

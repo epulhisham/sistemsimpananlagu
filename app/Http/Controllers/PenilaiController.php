@@ -20,23 +20,31 @@ class PenilaiController extends Controller
      */
     public function index()
     {
-        // $songs = Song::where('penilai_id',$penilai->pilih_penilai)->orderby('created_at','desc');
-        $songs = Song::latest();
+        $songs = Song::whereHas('penilai', function($query){
+            $query->where('user_id', auth()->user()->id);
+        })
+        ->latest();
 
-        if(request('search')){
-
-            $songs->where('artis', 'like', '%' . request('search') . '%')
-                ->orWhere('tajuk', 'like', '%' . request('search') . '%')
-                ->orWhere('album', 'like', '%' . request('search') . '%')
-                ->orWhere('pencipta_lagu', 'like', '%' . request('search') . '%')
-                ->orWhere('penulis_lirik', 'like', '%' . request('search') . '%')
-                ->orWhere('syarikat_rakaman', 'like', '%' . request('search') . '%')
-                ->orWhereHas('penilai', function($pilih_penilai){
-                    $pilih_penilai->where('pilih_penilai', 'like', '%' . request('search') . '%');
-                });
+        if (request('search')) {
+            $songs->where(function ($query) {
+                $query->where('artis', 'like', '%' . request('search') . '%')
+                    ->orWhere('tajuk', 'like', '%' . request('search') . '%')
+                    ->orWhere('album', 'like', '%' . request('search') . '%')
+                    ->orWhere('pencipta_lagu', 'like', '%' . request('search') . '%')
+                    ->orWhere('penulis_lirik', 'like', '%' . request('search') . '%')
+                    ->orWhere('syarikat_rakaman', 'like', '%' . request('search') . '%')
+                    ->orWhereHas('penilai', function($pilih_penilai){
+                        $pilih_penilai->where('pilih_penilai', 'like', '%' . request('search') . '%');
+                    });
+                if (!auth()->user()->id) {
+                    $query->whereHas('penilai', function($penilai) {
+                        $penilai->where('user_id', auth()->user()->id);
+                    });
+                }
+            });
         }
         
-
+        
         return view ('penilai.index',[
 
             "songs"=>$songs->paginate(3),
@@ -48,21 +56,31 @@ class PenilaiController extends Controller
         ]);
     }
 
-    public function index_lagudinilai(Song $lagu_dinilai)
+    public function index_lagudinilai()
     {
-        $songs = Song::whereNot('tarikh_dinilai',$lagu_dinilai->tarikh_dinilai = null);
+        $songs = Song::whereNotNull('tarikh_dinilai')
+        ->whereHas('penilai', function($query){
+            $query->where('user_id', auth()->user()->id);
+        })
+        ->latest();
 
-        if(request('search')){
-
-            $songs->where('artis', 'like', '%' . request('search') . '%')
-                ->orWhere('tajuk', 'like', '%' . request('search') . '%')
-                ->orWhere('album', 'like', '%' . request('search') . '%')
-                ->orWhere('pencipta_lagu', 'like', '%' . request('search') . '%')
-                ->orWhere('penulis_lirik', 'like', '%' . request('search') . '%')
-                ->orWhere('syarikat_rakaman', 'like', '%' . request('search') . '%')                
-                ->orWhereHas('penilai', function($pilih_penilai){
-                    $pilih_penilai->where('pilih_penilai', 'like', '%' . request('search') . '%');
-                });
+        if (request('search')) {
+            $songs->where(function ($query) {
+                $query->where('artis', 'like', '%' . request('search') . '%')
+                    ->orWhere('tajuk', 'like', '%' . request('search') . '%')
+                    ->orWhere('album', 'like', '%' . request('search') . '%')
+                    ->orWhere('pencipta_lagu', 'like', '%' . request('search') . '%')
+                    ->orWhere('penulis_lirik', 'like', '%' . request('search') . '%')
+                    ->orWhere('syarikat_rakaman', 'like', '%' . request('search') . '%')
+                    ->orWhereHas('penilai', function($pilih_penilai){
+                        $pilih_penilai->where('pilih_penilai', 'like', '%' . request('search') . '%');
+                    });
+                if (!auth()->user()->id) {
+                    $query->whereHas('penilai', function($penilai) {
+                        $penilai->where('user_id', auth()->user()->id);
+                    });
+                }
+            });
         }
         
 
@@ -77,13 +95,55 @@ class PenilaiController extends Controller
         ]);
     }
 
-    public function index_belumdinilai(Song $belum_dinilai)
+    public function index_belumdinilai()
     {
-        $songs = Song::where('tarikh_dinilai',$belum_dinilai->tarikh_dinilai = null);
+        $songs = Song::whereHas('penilai', function($query){
+            $query->where('user_id', auth()->user()->id);
+        })
+        ->where(function($query) {
+            $query->whereNull('tarikh_dinilai')->orWhere('tarikh_dinilai', '=', 0);
+        })
+        ->latest();
 
-        if(request('search')){
+        if (request('search')) {
+            $songs->where(function ($query) {
+                $query->where('artis', 'like', '%' . request('search') . '%')
+                    ->orWhere('tajuk', 'like', '%' . request('search') . '%')
+                    ->orWhere('album', 'like', '%' . request('search') . '%')
+                    ->orWhere('pencipta_lagu', 'like', '%' . request('search') . '%')
+                    ->orWhere('penulis_lirik', 'like', '%' . request('search') . '%')
+                    ->orWhere('syarikat_rakaman', 'like', '%' . request('search') . '%')
+                    ->orWhereHas('penilai', function($pilih_penilai){
+                        $pilih_penilai->where('pilih_penilai', 'like', '%' . request('search') . '%');
+                    });
+                if (!auth()->user()->id) {
+                    $query->whereHas('penilai', function($penilai) {
+                        $penilai->where('user_id', auth()->user()->id);
+                    });
+                }
+            });
+        }
+        
 
-            $songs->where('artis', 'like', '%' . request('search') . '%')
+        return view ('penilai.index_belumdinilai',[
+
+            "songs"=>$songs->paginate(3),
+            'statuses'=>Status::all(),
+            'penilais'=>Penilai::all(),
+            'countries'=>Country::all(),
+            'keputusans'=>Keputusan::all()
+            
+        ]);
+    }
+
+    public function index_lulus(Song $lagu_lulus)
+    {
+        $songs = Song::where('keputusan_id',$lagu_lulus->keputusan_id = 1);
+
+        $songs->where(function($query) {
+            $query->where('keputusan_id', 1);
+        })->where(function($query) {
+            $query->where('artis', 'like', '%' . request('search') . '%')
                 ->orWhere('tajuk', 'like', '%' . request('search') . '%')
                 ->orWhere('album', 'like', '%' . request('search') . '%')
                 ->orWhere('pencipta_lagu', 'like', '%' . request('search') . '%')
@@ -92,10 +152,40 @@ class PenilaiController extends Controller
                 ->orWhereHas('penilai', function($pilih_penilai){
                     $pilih_penilai->where('pilih_penilai', 'like', '%' . request('search') . '%');
                 });
-        }
+        });
         
 
-        return view ('penilai.index_belumdinilai',[
+        return view ('penilai.index_lulus',[
+
+            "songs"=>$songs->paginate(3),
+            'statuses'=>Status::all(),
+            'penilais'=>Penilai::all(),
+            'countries'=>Country::all(),
+            'keputusans'=>Keputusan::all()
+            
+        ]);
+    }
+
+    public function index_taklulus(Song $lagu_taklulus)
+    {
+        $songs = Song::where('keputusan_id',$lagu_taklulus->keputusan_id = 2);
+
+        $songs->where(function($query) {
+            $query->where('keputusan_id', 2);
+        })->where(function($query) {
+            $query->where('artis', 'like', '%' . request('search') . '%')
+                ->orWhere('tajuk', 'like', '%' . request('search') . '%')
+                ->orWhere('album', 'like', '%' . request('search') . '%')
+                ->orWhere('pencipta_lagu', 'like', '%' . request('search') . '%')
+                ->orWhere('penulis_lirik', 'like', '%' . request('search') . '%')
+                ->orWhere('syarikat_rakaman', 'like', '%' . request('search') . '%')
+                ->orWhereHas('penilai', function($pilih_penilai){
+                    $pilih_penilai->where('pilih_penilai', 'like', '%' . request('search') . '%');
+                });
+        });
+        
+
+        return view ('penilai.index_taklulus',[
 
             "songs"=>$songs->paginate(3),
             'statuses'=>Status::all(),
@@ -156,7 +246,8 @@ class PenilaiController extends Controller
     {
         return view('penilai.edit',[
 
-            'song'=>$penilai_lagu
+            'song'=>$penilai_lagu,
+            'keputusans' =>  Keputusan::all()
         ]);
     }
 
@@ -178,7 +269,8 @@ class PenilaiController extends Controller
             'sebutan' => 'max:255',
             'nyanyian' => 'max:255',
             'muzik' => 'max:255',
-            'penerbitan_teknikal' => 'max:255'
+            'penerbitan_teknikal' => 'max:255',
+            'keputusan_id'=>''
         ]);
         
 

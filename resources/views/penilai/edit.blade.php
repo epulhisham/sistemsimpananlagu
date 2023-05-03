@@ -66,6 +66,19 @@
                         </div>      
                     @enderror
                 </div>
+                <div class="mb-3">
+                    <label for="keputusan" class="form-label">Keputusan</label>
+                    <select class="form-select" name="keputusan_id">
+                        <option value="0">- Pilih -</option>
+                        @foreach ($keputusans as $keputusan )
+                            @if (old('keputusan_id',$song->keputusan_id) == $keputusan->id)
+                                <option value="{{ $keputusan->id }}" selected>{{ $keputusan->pilih_keputusan }}</option>
+                            @else
+                                <option value="{{ $keputusan->id }}">{{ $keputusan->pilih_keputusan }}</option>
+                            @endif
+                        @endforeach
+                    </select>
+                </div>
             @endcan
 
             <a href="{{ url()->previous() }}" class="btn btn-dark link-light">

@@ -73,7 +73,7 @@
                 <a href="{{ $song->fail_lagu }}" class="badge bg-dark" target="_blank"><span data-feather="download" class="align-text-bottom"></span></a>
             </div>
         </div>
-        <div class="mb-3">
+        {{-- <div class="mb-3">
             <label for="status" class="form-label">Status Lagu</label>
             <select class="form-select" name="status_id" disabled>
                 <option value="0">- Pilih -</option>
@@ -85,9 +85,9 @@
                     @endif
                 @endforeach
             </select>
-        </div>
+        </div> --}}
         <div class="mb-3">
-            <label for="tarikh_diterima" class="form-label">Tarikh Lagu Diterima</label>
+            <label for="tarikh_diterima" class="form-label">Tarikh Lagu Dihantar</label>
             <input type="date" class="form-control @error('tarikh_diterima') is-invalid @enderror" id="tarikh_diterima" name="tarikh_diterima" disabled required autofocus value="{{ old('tarikh_diterima',$song->tarikh_diterima) }}">
             @error('tarikh_diterima')
                 <div class="invalid-feedback">
@@ -126,6 +126,19 @@
                     {{ $message }}
                 </div>      
             @enderror
+        </div>
+        <div class="mb-3">
+            <label for="keputusan class="form-label">Keputusan</label>
+            <select class="form-select" name="keputusan_id" disabled>
+                <option value="0">- Pilih -</option>
+                @foreach ($keputusans as $keputusan)
+                    @if (old('keputusanid',$song->keputusan->id) == $keputusan->id)
+                        <option value="{{ $keputusan->id }}" selected>{{ $keputusan->pilih_keputusan }}</option>
+                    @else
+                        <option value="{{ $keputusan->id }}">{{ $keputusan->pilih_keputusan }}</option>
+                    @endif
+                @endforeach
+            </select>
         </div>
         <a href="/pelulus-lagu" class="btn btn-dark link-light">
             <span data-feather="arrow-left"></span>

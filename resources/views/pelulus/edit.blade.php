@@ -10,8 +10,33 @@
         <form method="post" action="/pelulus-lagu/{{ $song->id }}" class="mb-5" enctype="multipart/form-data">
             @method('put')
             @csrf
-            @auth      
-            @can('pelulus')
+            @auth  
+            <div class="mb-3">
+                <label for="keputusan class="form-label">Keputusan</label>
+                <select class="form-select" name="keputusan_id" disabled>
+                    <option value="0">- Pilih -</option>
+                    @foreach ($keputusans as $keputusan)
+                        @if (old('keputusanid',$song->keputusan->id) == $keputusan->id)
+                            <option value="{{ $keputusan->id }}" selected>{{ $keputusan->pilih_keputusan }}</option>
+                        @else
+                            <option value="{{ $keputusan->id }}">{{ $keputusan->pilih_keputusan }}</option>
+                        @endif
+                    @endforeach
+                </select>
+            </div>
+            <div class="mb-3">
+                <label for="status" class="form-label">Status Lagu</label>
+                <select class="form-select" name="status_id">
+                    <option value="0">- Pilih -</option>
+                    @foreach ($statuses as $status )
+                        @if (old('status_id',$song->status_id) == $status->id)
+                            <option value="{{ $status->id }}" selected>{{ $status->status_lagu }}</option>
+                        @else
+                            <option value="{{ $status->id }}">{{ $status->status_lagu }}</option>
+                        @endif
+                    @endforeach
+                </select>
+            </div>
             <div class="mb-3">
                 <label for="penilai" class="form-label">Pilih Penilai</label>
                 <select class="form-select" name="penilai_id">
@@ -26,22 +51,9 @@
                 </select>
             </div>
                 <div class="mb-3">
-                    <label for="keputusan" class="form-label">Keputusan</label>
-                    <select class="form-select" name="keputusan_id">
-                        <option value="0">- Pilih -</option>
-                        @foreach ($keputusans as $keputusan )
-                            @if (old('keputusan_id',$song->keputusan_id) == $keputusan->id)
-                                <option value="{{ $keputusan->id }}" selected>{{ $keputusan->pilih_keputusan }}</option>
-                            @else
-                                <option value="{{ $keputusan->id }}">{{ $keputusan->pilih_keputusan }}</option>
-                            @endif
-                        @endforeach
-                    </select>
-                </div>
-                <div class="mb-3">
                     <label for="terbit" class="form-label">Penerbitan Lagu</label>
                     <div class="form-check form-switch">
-                        <input type="checkbox" id="terbit" name="terbit" class="form-check-input" value="1" {{ old('terbit',$song->terbit)}}>
+                        <input type="checkbox" id="terbit" name="terbit" class="form-check-input" value="1" {{ old('terbit',$song->terbit) == 1 ? 'checked' : '' }}>
                         <label class="form-check-label" for="terbit">Lagu Diterbitkan</label>
                     </div>
                 </div>
@@ -54,7 +66,6 @@
                         </div>      
                     @enderror
                 </div>
-            @endcan
 
             <a href="{{ url()->previous() }}" class="btn btn-dark link-light">
                 <span data-feather="arrow-left"></span>

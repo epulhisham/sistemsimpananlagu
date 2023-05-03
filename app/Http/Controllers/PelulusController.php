@@ -2,15 +2,13 @@
 
 namespace App\Http\Controllers;
 
-use DOMDocument;
 use Carbon\Carbon;
 use App\Models\Song;
-use App\Models\User;
 use App\Models\Status;
 use App\Models\Country;
 use App\Models\Penilai;
+use App\Models\Download;
 use App\Models\Keputusan;
-use App\Models\Choose_user;
 use Illuminate\Http\Request;
 use App\Models\Song_category;
 use Illuminate\Support\Facades\DB;
@@ -33,13 +31,16 @@ class PelulusController extends Controller
                 ->orWhere('album', 'like', '%' . request('search') . '%')
                 ->orWhere('pencipta_lagu', 'like', '%' . request('search') . '%')
                 ->orWhere('penulis_lirik', 'like', '%' . request('search') . '%')
-                ->orWhere('syarikat_rakaman', 'like', '%' . request('search') . '%');
+                ->orWhere('syarikat_rakaman', 'like', '%' . request('search') . '%')
+                ->orWhereHas('penilai', function($pilih_penilai){
+                    $pilih_penilai->where('pilih_penilai', 'like', '%' . request('search') . '%');
+                });
         }
         
 
         return view ('pelulus.index',[
 
-            "songs"=>$songs->paginate(3),
+            "songs"=>$songs->paginate(5),
             'statuses'=>Status::all(),
             'penilais'=>Penilai::all(),
             'countries'=>Country::all(),
@@ -50,18 +51,22 @@ class PelulusController extends Controller
 
     public function index_meluluskan(Song $meluluskan)
     {
-        $songs = Song::where('keputusan_id',$meluluskan->keputusan_id = 3);
+        $songs = Song::where('keputusan_id',$meluluskan->keputusan_id = 3)
+                    ->whereNotNull('tarikh_dinilai');
 
-        if(request('search')){
-
-            $songs->where('artis', 'like', '%' . request('search') . '%')
+        $songs->where(function($query) {
+            $query->where('keputusan_id', 3);
+        })->where(function($query) {
+            $query->where('artis', 'like', '%' . request('search') . '%')
                 ->orWhere('tajuk', 'like', '%' . request('search') . '%')
                 ->orWhere('album', 'like', '%' . request('search') . '%')
                 ->orWhere('pencipta_lagu', 'like', '%' . request('search') . '%')
                 ->orWhere('penulis_lirik', 'like', '%' . request('search') . '%')
-                ->orWhere('syarikat_rakaman', 'like', '%' . request('search') . '%');
-        }
-        
+                ->orWhere('syarikat_rakaman', 'like', '%' . request('search') . '%')
+                ->orWhereHas('penilai', function($pilih_penilai){
+                    $pilih_penilai->where('pilih_penilai', 'like', '%' . request('search') . '%');
+                });
+        });
 
         return view ('pelulus.index_meluluskan',[
 
@@ -74,78 +79,32 @@ class PelulusController extends Controller
         ]);
     }
 
-    public function index_lulus(Song $lagu_lulus)
-    {
-        $songs = Song::where('keputusan_id',$lagu_lulus->keputusan_id = 1);
-
-        if(request('search')){
-
-            $songs->where('artis', 'like', '%' . request('search') . '%')
-                ->orWhere('tajuk', 'like', '%' . request('search') . '%')
-                ->orWhere('album', 'like', '%' . request('search') . '%')
-                ->orWhere('pencipta_lagu', 'like', '%' . request('search') . '%')
-                ->orWhere('penulis_lirik', 'like', '%' . request('search') . '%')
-                ->orWhere('syarikat_rakaman', 'like', '%' . request('search') . '%')
-                ->orWhere('kategori_lagu', 'like', '%' . request('search') . '%');
-        }
-        
-
-        return view ('pelulus.index_lulus',[
-
-            "songs"=>$songs->paginate(3),
-            'statuses'=>Status::all(),
-            'penilais'=>Penilai::all(),
-            'countries'=>Country::all(),
-            'keputusans'=>Keputusan::all()
-            
-        ]);
-    }
-
-    public function index_taklulus(Song $lagu_taklulus)
-    {
-        $songs = Song::where('keputusan_id',$lagu_taklulus->keputusan_id = 2);
-
-        if(request('search')){
-
-            $songs->where('artis', 'like', '%' . request('search') . '%')
-                ->orWhere('tajuk', 'like', '%' . request('search') . '%')
-                ->orWhere('album', 'like', '%' . request('search') . '%')
-                ->orWhere('pencipta_lagu', 'like', '%' . request('search') . '%')
-                ->orWhere('penulis_lirik', 'like', '%' . request('search') . '%')
-                ->orWhere('syarikat_rakaman', 'like', '%' . request('search') . '%')
-                ->orWhere('kategori_lagu', 'like', '%' . request('search') . '%');
-        }
-        
-
-        return view ('pelulus.index_taklulus',[
-
-            "songs"=>$songs->paginate(3),
-            'statuses'=>Status::all(),
-            'penilais'=>Penilai::all(),
-            'countries'=>Country::all(),
-            'keputusans'=>Keputusan::all()
-            
-        ]);
-    }
-
-    public function index_statistik()
+    public function index_statistik(Request $request)
     {   
-        $songs1 = Song::paginate(3);  
-        $songs = Song::count();
-        $syarikat_rakaman = User::where('choose_user_id','1')->count();
-        $syarikat_stesen = User::where('choose_user_id','2')->count();
-        $penilai = User::where('choose_user_id','3')->count();
-        $downloadCount = Song::count('downloadCount');
+        $search = $request->input('search');
+        $startDate = $request->input('startDate');
+        $endDate = $request->input('endDate');
+        
+        $downloads = Download::whereHas('user', function ($query) use ($search) {
+            $query->where('name', 'LIKE', '%'.$search.'%');
+        })
+        ->whereBetween('created_at', [$startDate, $endDate])
+        ->paginate(5)
+        ->appends(['search' => $search, 'startDate' => $startDate, 'endDate' => $endDate]);
 
-        $songsChart = Song::select(DB::raw("COUNT(*) as count"), DB::raw("MONTHNAME(downloadCount) as month_name"))
-        ->whereYear('created_at', date('Y'))
-        ->groupBy(DB::raw("month_name"))
-        ->pluck('count', 'month_name');
+        $labels = $downloads->pluck('user.name')->unique();
+        $data = $downloads->groupBy('user.name')->map(function ($downloadsByUser) {
+        return count($downloadsByUser);
+        })->values();
 
-        $labels = $songsChart->keys();
-        $data = $songsChart->values();
 
-        return view ('pelulus.index_statistik', compact('syarikat_rakaman', 'syarikat_stesen', 'penilai', 'songs', 'labels', 'data', 'downloadCount','songs1'));
+        return view('pelulus.index_statistik',[
+
+            'downloads' => $downloads,
+            'labels'=>$labels,
+            'data'=>$data
+
+        ]);
     }
 
     /**
@@ -202,6 +161,7 @@ class PelulusController extends Controller
             'song'=>$pelulus_lagu,
             'keputusans'=>Keputusan::all(),
             'penilais'=>Penilai::all(),
+            'statuses'=>Status::all()
 
         ]);
     }
@@ -215,17 +175,16 @@ class PelulusController extends Controller
      */
     public function update(Request $request, Song $pelulus_lagu)
     {
-        // $lagu = Song::find($pelulus_lagu->id);
-        // dd($song);
-
         $validatedData = $request->validate([
-            'tarikh_diluluskan' => '',   
-            'keputusan_id'=>'',
+            'tarikh_diluluskan' => '',
+            'status_id' => '',   
             'penilai_id'=>'',
             'terbit'=>''
         ]);
         
         $pelulus_lagu->terbit = $request->has('terbit');
+
+        $validatedData['terbit'] = $pelulus_lagu->terbit;
 
         Song::where('id', $pelulus_lagu->id)->update($validatedData);
 

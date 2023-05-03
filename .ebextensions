@@ -1,5 +1,0 @@
-files:
-  "/var/www/html":
-    mode: "000755"
-    owner: root
-    group: root

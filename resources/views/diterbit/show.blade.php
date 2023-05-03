@@ -87,7 +87,7 @@
             </select>
         </div>
         <div class="mb-3">
-            <label for="tarikh_diterima" class="form-label">Tarikh Lagu Diterima</label>
+            <label for="tarikh_diterima" class="form-label">Tarikh Lagu Dihantar</label>
             <input type="date" class="form-control @error('tarikh_diterima') is-invalid @enderror" id="tarikh_diterima" name="tarikh_diterima" disabled required autofocus value="{{ old('tarikh_diterima',$song->tarikh_diterima) }}">
             @error('tarikh_diterima')
                 <div class="invalid-feedback">

@@ -38,6 +38,15 @@
                     </div>
                 @enderror
             </div>
+            <div class="mb-3">
+                <label for="phone_number">Phone number</label>
+                <input type="tel" name="phone_number" class="form-control @error('phone_number') is-invalid @enderror" id="phone_number" placeholder="Enter phone number" required value="{{ old('phone_number',auth()->user()->phone_number) }}">
+                @error('phone_number')
+                    <div class="invalid-feedback">
+                        {{ $message}}
+                    </div>
+                @enderror
+            </div>   
 
             <a href="{{ url()->previous() }}" class="btn btn-dark link-light">
                 <span data-feather="arrow-left"></span>

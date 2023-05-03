@@ -27,63 +27,76 @@
 </div>
 
 <div class="table-responsive-lg col-md-11">
-    <table class="table table-bordered">
-        <thead>
-            <tr>
-            <th scope="col">Bil.</th>
-            <th scope="col">Artis</th>
-            <th scope="col">Tajuk</th>
-            <th scope="col">Lagu</th>
-            <th scope="col">Tindakan</th>
-            <th scope="col">Penilaian</th>
-            <th scope="col">Keputusan</th>
-            </tr>
-        </thead>
-        <tbody>
-            @foreach ($songs as $song )
+    @if (count($songs) > 0)
+        <table class="table table-bordered">
+            <thead>
                 <tr>
-                <td>{{ $loop->iteration }}</td>
-                <td>{{ $song->artis }}</td>
-                <td>{{ $song->tajuk }}</td>
-                <td>
-                    <audio controls src="{{ $song->lagu }}"></audio>
-                </td>
-                <td>
-                    <a href="/lagu/{{ $song->id }}" class="badge bg-success link-light">
-                        <span data-feather="file-text" class="align-text-bottom"></span>
-                    </a>
-                    <a href="/lagu/{{ $song->id }}/edit" class="badge bg-info link-light">
-                        <span data-feather="edit" class="align-text-bottom"></span>
-                    </a>
-                    <form action="/lagu/{{ $song->id }}" method="post" class="d-inline">
-                        @method('delete')
-                        @csrf
-                        <button class="badge bg-danger border-0" onclick="return confirm('Are you sure?')">
-                            <span data-feather="trash" class="align-text-bottom"></span>
-                        </button>
-                    </form>
-                </td>
-                <td>
-                    @if ($song->tarikh_dinilai == null)
-                        Belum dinilai
-                    @else
-                        Telah dinilai
-                    @endif
-                </td>
-                <td>
-                    @if ($song->keputusan_id > 0)
-                        {{ $song->keputusan->pilih_keputusan }}
-                    @else
-                        Belum membuat keputusan
-                    @endif
-                </td>
+                <th scope="col">Bil.</th>
+                <th scope="col">Artis</th>
+                <th scope="col">Tajuk</th>
+                <th scope="col">Lagu</th>
+                <th scope="col">Tindakan</th>
+                <th scope="col">Penilaian</th>
+                <th scope="col">Keputusan</th>
                 </tr>
-            @endforeach
-        </tbody>
-    </table>
-    <div class="d-flex justify-content-end">
-        {{ $songs->links() }}
-    </div>
+            </thead>
+            <tbody>
+                @foreach ($songs as $song )
+                    <tr>
+                    <td>{{ $songs->firstItem() + $loop->index }}</td>
+                    <td>{{ $song->artis }}</td>
+                    <td>{{ $song->tajuk }}</td>
+                    <td>
+                        <audio controls src="{{ $song->lagu }}"></audio>
+                    </td>
+                    <td>
+                        <div class="d-flex align-items-center">
+                            <a href="/lagu/{{ $song->id }}" class="badge bg-success link-light mx-1">
+                                <span data-feather="file-text" class="align-text-bottom"></span>
+                            </a>
+                        </div>
+                    </td>                                       
+                    <td>
+                        @if ($song->tarikh_dinilai == null)
+                            Belum dinilai
+                        @else
+                            Telah dinilai
+                        @endif
+                    </td>
+                    <td>
+                        @if ($song->keputusan_id > 0)
+                            {{ $song->keputusan->pilih_keputusan }}
+                        @else
+                            Belum membuat keputusan
+                        @endif
+                    </td>
+                    </tr>
+                @endforeach
+            </tbody>
+        </table>
+        <div class="d-flex justify-content-end">
+            {{ $songs->links() }}
+        </div>
+    @else
+        <table class="table table-bordered">
+            <thead>
+                <tr>
+                <th scope="col">Bil.</th>
+                <th scope="col">Artis</th>
+                <th scope="col">Tajuk</th>
+                <th scope="col">Lagu</th>
+                <th scope="col">Tindakan</th>
+                <th scope="col">Penilaian</th>
+                <th scope="col">Keputusan</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td colspan="7" class="text-center">Tiada Maklumat.</td>
+                </tr>
+            </tbody>
+        </table>
+    @endif
 </div>
 
 

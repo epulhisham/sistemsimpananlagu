@@ -10,7 +10,7 @@ class Song extends Model
 {
     use HasFactory;
 
-    protected $guarded = ['id,user_id,status_id,penilai_id,country_id,keputusan_id, song_category_id'];
+    protected $guarded = ['song_id,user_id,status_id,penilai_id,country_id,keputusan_id, song_category_id'];
     protected $casts = ['terbit' => 'boolean'];
 
     public function download ()

@@ -87,7 +87,7 @@
             </select>
         </div>
         <div class="mb-3">
-            <label for="tarikh_diterima" class="form-label">Tarikh Lagu Diterima</label>
+            <label for="tarikh_diterima" class="form-label">Tarikh Lagu Dihantar</label>
             <input type="date" class="form-control @error('tarikh_diterima') is-invalid @enderror" id="tarikh_diterima" name="tarikh_diterima" disabled required autofocus value="{{ old('tarikh_diterima',$song->tarikh_diterima) }}">
             @error('tarikh_diterima')
                 <div class="invalid-feedback">
@@ -95,6 +95,52 @@
                 </div>      
             @enderror
         </div>
+        <div class="mb-3 mt-5 border-bottom">
+            <label for="penilai" class="fs-5 fw-bold">Bahagian Penilai</label>
+        </div>
+        <div class="mb-3">
+            <label for="lirik" class="form-label">Lirik</label>
+            <input type="text" class="form-control" id="lirik" name="lirik" disabled required autofocus value="{{ old('lirik',$song->lirik) }}">
+        </div>
+        <div class="mb-3">
+            <label for="sebutan" class="form-label">Sebutan</label>
+            <input type="text" class="form-control" id="sebutan" name="sebutan" disabled required autofocus value="{{ old('sebutan',$song->sebutan) }}">
+        </div>
+        <div class="mb-3">
+            <label for="nyanyian" class="form-label">Nyanyian</label>
+            <input type="text" class="form-control" id="nyanyian" name="nyanyian" disabled required autofocus value="{{ old('nyanyian',$song->nyanyian) }}">
+        </div>
+        <div class="mb-3">
+            <label for="muzik" class="form-label">Muzik</label>
+            <input type="text" class="form-control" id="muzik" name="muzik" disabled required autofocus value="{{ old('muzik',$song->muzik) }}">
+        </div>
+        <div class="mb-3">
+            <label for="penerbitan_teknikal" class="form-label">Penerbitan Teknikal</label>
+            <input type="text" class="form-control" id="penerbitan_teknikal" name="penerbitan_teknikal" disabled required autofocus value="{{ old('penerbitan_teknikal',$song->penerbitan_teknikal) }}">
+        </div>
+        <div class="mb-3">
+            <label for="tarikh_dinilai" class="form-label">Tarikh Lagu Dinilai</label>
+            <input type="date" class="form-control @error('tarikh_dinilai') is-invalid @enderror" id="tarikh_dinilai" name="tarikh_dinilai" disabled value="{{ old('tarikh_dinilai',$song->tarikh_dinilai) }}">
+            @error('tarikh_dinilai')
+                <div class="invalid-feedback">
+                    {{ $message }}
+                </div>      
+            @enderror
+        </div>
+        <div class="mb-3">
+            <label for="keputusan class="form-label">Keputusan</label>
+            <select class="form-select" name="keputusan_id" disabled>
+                <option value="0">- Pilih -</option>
+                @foreach ($keputusans as $keputusan)
+                    @if (old('keputusanid',$song->keputusan->id) == $keputusan->id)
+                        <option value="{{ $keputusan->id }}" selected>{{ $keputusan->pilih_keputusan }}</option>
+                    @else
+                        <option value="{{ $keputusan->id }}">{{ $keputusan->pilih_keputusan }}</option>
+                    @endif
+                @endforeach
+            </select>
+        </div>
+
         <a href="/penilai-lagu" class="btn btn-dark link-light">
             <span data-feather="arrow-left"></span>
             Kembali

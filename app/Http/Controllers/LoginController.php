@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 
@@ -14,53 +15,46 @@ class LoginController extends Controller
 
     public function authenticate(Request $request)
     {
-        // $this->$request->validate([
-        //     'email'=>'required|email:dns',
-        //     'password'=>'required',
-        // ]);
-
         $this->validate($request, [
             'email'   => 'required|email:dns',
             'password' => 'required|min:5'
         ]);
+    
+        // Attempt to authenticate user
+        if (Auth::attempt(['email' => $request->email, 'password' => $request->password])) {
+            $user = Auth::user();
 
-        // if(Auth::attempt($credentials))
-        // {
-        //     $request->session()->regenerate();
 
-        //     return redirect()->intended('/mainpage/songs');
-        // }
-        if (Auth::attempt(['email' => $request->email, 'password' => $request->password, 'choose_user_id' => 1])) {
-            
-            $request->session()->regenerate();
-
-            return redirect()->intended('/lagu');
+    
+            // Check if user is approved
+            if ($user->isApproved == 1) {
+                $user->last_login = now();
+                $user->save();
+                $request->session()->regenerate();
+                // Redirect to appropriate URL based on user type
+                switch ($user->choose_user_id) {
+                    case 1:
+                    case 2:
+                        return redirect()->intended('/lagu');
+                    case 3:
+                        return redirect()->intended('/penilai-lagu');
+                    case 4:
+                        return redirect()->intended('/pelulus-lagu');
+                    case 5:
+                    default:
+                        return redirect()->intended('/admin');
+                }
+            } else {
+                // User not approved
+                Auth::logout();
+                return back()->with('loginError','Log masuk gagal! Pengguna belum disahkan.');
+            }
         }
-
-        if (Auth::attempt(['email' => $request->email, 'password' => $request->password, 'choose_user_id' => 2])) {
-            
-            $request->session()->regenerate();
-
-            return redirect()->intended('/lagu');
-        }
-
-        if (Auth::attempt(['email' => $request->email, 'password' => $request->password, 'choose_user_id' => 3])) {
-            
-            $request->session()->regenerate();
-
-            return redirect()->intended('/penilai-lagu');
-        }
-
-
-        if (Auth::attempt(['email' => $request->email, 'password' => $request->password, 'choose_user_id' => 4])) {
-            
-            $request->session()->regenerate();
-
-            return redirect()->intended('/pelulus-lagu');
-        }
-
+    
+        // Invalid login credentials
         return back()->with('loginError','Log masuk gagal! Sila pastikan email address dan password anda betul');
     }
+    
 
     public function logout(Request $request){
 

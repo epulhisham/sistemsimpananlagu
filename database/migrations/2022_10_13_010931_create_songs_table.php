@@ -27,9 +27,9 @@ return new class extends Migration
             $table->string('pencipta_lagu');
             $table->string('penulis_lirik');
             $table->string('syarikat_rakaman');
-            $table->string('catatan');
+            $table->string('catatan')->nullable();
             $table->string('lagu');
-            $table->string('fail_lagu');
+            $table->string('fail_lagu')->nullable();
             $table->date('tarikh_diterima')->nullable();
             $table->date('tarikh_dinilai')->nullable();
             $table->date('tarikh_diluluskan')->nullable();

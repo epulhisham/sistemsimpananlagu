@@ -23,7 +23,7 @@
                         <label for="username">Username</label>
                         @error('username')
                             <div class="invalid-feedback">
-                                {{ $message }}
+                                {{ 'Username sudah wujud di dalam sistem' }}
                             </div>
                         @enderror
                     </div>
@@ -32,16 +32,25 @@
                         <label for="email">Email address</label>
                         @error('email')
                             <div class="invalid-feedback">
-                                {{ $message }}
+                                {{ 'Email sudah wujud di dalam sistem' }}
                             </div>
                         @enderror
                     </div>
+                    <div class="form-floating">
+                        <input type="tel" name="phone_number" class="form-control @error('phone_number') is-invalid @enderror" id="phone_number" placeholder="Enter phone number" required value="{{ old('phone_number') }}">
+                        <label for="phone_number">Phone number</label>
+                        @error('phone_number')
+                            <div class="invalid-feedback">
+                                {{ $message}}
+                            </div>
+                        @enderror
+                    </div>                    
                     <div class="form-floating">
                         <input type="password" name="password" class="form-control rounded-bottom @error('password') is-invalid @enderror" id="password" placeholder="Password" required>
                         <label for="password">Password</label>
                         @error('password')
                             <div class="invalid-feedback">
-                                {{ $message }}
+                                {{ 'Password mestilah sekurang-kurangya 5 aksara' }}
                             </div>
                         @enderror
                     </div>
@@ -49,22 +58,24 @@
                         <select id="choose_user_id" class="form-select rounded-bottom @error('choose_user_id') is-invalid @enderror" name="choose_user_id">
                             <option value="0">- Pilih Pengguna -</option>
                             @foreach ($choose_users as $choose_user )
-                                @if (old('choose_user_id') == $choose_user->id)
-                                    <option value="{{ $choose_user->id }}" selected>{{ $choose_user->pilih_pengguna }}</option>
-                                @else
-                                    <option value="{{ $choose_user->id }}">{{ $choose_user->pilih_pengguna }}</option>
+                                @if ($choose_user->id != 5)
+                                    @if (old('choose_user_id') == $choose_user->id)
+                                        <option value="{{ $choose_user->id }}" selected>{{ $choose_user->pilih_pengguna }}</option>
+                                    @else
+                                        <option value="{{ $choose_user->id }}">{{ $choose_user->pilih_pengguna }}</option>
+                                    @endif
                                 @endif
                             @endforeach
-                            @error('choose_user')
-                            <div class="invalid-feedback">
-                                {{ $message }}
-                            </div>
-                            @enderror
                         </select>
+                        @error('choose_user_id')
+                            <div class="invalid-feedback">
+                                {{ 'Sila Pilih pengguna' }}
+                            </div>
+                        @enderror                        
                     </div>
-                    <button class="w-100 btn btn-lg btn-primary mt-4" type="submit">Register</button>
+                    <button class="w-100 btn btn-lg btn-primary mt-1" type="submit">Daftar</button>
                 </form>
-                <small class="d-block text-center mt-3">Already registered? <a href="/login">Log in</a></small>
+                <small class="d-block text-center mt-3">Sudah Berdaftar? <a href="/login">Log Masuk</a></small>
             </main>
         </div>
     </div>

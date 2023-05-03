@@ -18,6 +18,6 @@ class Download extends Model
 
     public function song()
     {
-        return $this->song(Song::class);
+        return $this->belongsTo(Song::class);
     }
 }

@@ -74,20 +74,7 @@
             </div>
         </div>
         <div class="mb-3">
-            <label for="status" class="form-label">Status Lagu</label>
-            <select class="form-select" name="status_id" disabled>
-                <option value="0">- Pilih -</option>
-                @foreach ($statuses as $status )
-                    @if (old('status_id',$song->status->id) == $status->id)
-                        <option value="{{ $status->id }}" selected>{{ $status->status_lagu }}</option>
-                    @else
-                        <option value="{{ $status->id }}">{{ $status->status_lagu }}</option>
-                    @endif
-                @endforeach
-            </select>
-        </div>
-        <div class="mb-3">
-            <label for="tarikh_diterima" class="form-label">Tarikh Lagu Diterima</label>
+            <label for="tarikh_diterima" class="form-label">Tarikh Lagu Dihantar</label>
             <input type="date" class="form-control @error('tarikh_diterima') is-invalid @enderror" id="tarikh_diterima" name="tarikh_diterima" disabled required autofocus value="{{ old('tarikh_diterima',$song->tarikh_diterima) }}">
             @error('tarikh_diterima')
                 <div class="invalid-feedback">
@@ -99,18 +86,6 @@
             <span data-feather="arrow-left"></span>
             Kembali
         </a>
-        <a href="/lagu/{{ $song->id }}/edit" class="btn btn-info link-light">
-            <span data-feather="edit"></span>
-            Kemaskini
-        </a>
-        <form action="/lagu/{{ $song->id }}" method="post" class="d-inline">
-            @method('delete')
-            @csrf
-            <button class="btn btn-danger border-0" onclick="return confirm('Are you sure?')">
-                <span data-feather="trash"></span>
-                Padam
-            </button>
-        </form>
     </div>
 
 

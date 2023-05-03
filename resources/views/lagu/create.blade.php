@@ -101,7 +101,7 @@
             </div>
             <div class="mb-3">
                 <label for="catatan" class="form-label">Catatan</label>
-                <textarea class="form-control @error('catatan') is-invalid @enderror" id="catatan" rows="3"  name="catatan" required autofocus value="{{ old('catatan') }}"></textarea>
+                <textarea class="form-control @error('catatan') is-invalid @enderror" id="catatan" rows="3"  name="catatan" autofocus value="{{ old('catatan') }}"></textarea>
                 @error('catatan')
                 <div class="invalid-feedback">
                     {{ $message }}
@@ -110,18 +110,18 @@
             </div>
             <div class="mb-3">
                 <div class="mb-3">
-                    <label for="lagu" class="form-label">Lagu</label>
+                    <label for="lagu" class="form-label">Audio Lagu</label>
                     <input class="form-control @error('lagu') is-invalid @enderror" type="file" id="lagu" name="lagu" multiple>
                     @error('lagu')
                     <div class="invalid-feedback">
-                        {{ $message }}
+                        {{ 'Sila Pilih Audio Lagu' }}
                     </div>      
                     @enderror
                 </div>
             </div>
             <div class="mb-3">
                 <div class="mb-3">
-                    <label for="fail_lagu" class="form-label">Fail Lagu</label>
+                    <label for="fail_lagu" class="form-label">Lirik Lagu</label>
                     <input class="form-control @error('fail_lagu') is-invalid @enderror" type="file" id="fail_lagu" name="fail_lagu" multiple>
                     @error('fail_lagu')
                     <div class="invalid-feedback">
@@ -131,25 +131,7 @@
                 </div>
             </div>
             <div class="mb-3">
-                <label for="status" class="form-label">Status Lagu</label>
-                <select class="form-select @error('status_id') is-invalid @enderror" name="status_id">
-                    <option value="0">- Pilih -</option>
-                    @foreach ($statuses as $status )
-                        @if (old('status_id') == $status->id)
-                            <option value="{{ $status->id }}" selected>{{ $status->status_lagu }}</option>
-                        @else
-                            <option value="{{ $status->id }}">{{ $status->status_lagu }}</option>
-                        @endif
-                    @endforeach
-                </select>
-                @error('status_id')
-                <div class="invalid-feedback">
-                    {{ "Sila pilih Status Lagu" }}
-                </div>      
-                @enderror
-            </div>
-            <div class="mb-3">
-                <label for="tarikh_diterima" class="form-label">Tarikh Lagu Diterima</label>
+                <label for="tarikh_diterima" class="form-label">Tarikh Lagu Dihantar</label>
                 <input type="date" class="form-control @error('tarikh_diterima') is-invalid @enderror" id="tarikh_diterima" name="tarikh_diterima" required autofocus value="{{ old('tarikh_diterima') }}">
                 @error('tarikh_diterima')
                     <div class="invalid-feedback">
@@ -158,10 +140,10 @@
                 @enderror
             </div>
 
-            <button type="submit" class="btn btn-dark">Hantar Lagu</button>
             <a href="/lagu" class="btn btn-danger border-0" onclick="return confirm('Adakah anda pasti untuk batal?')">
                 Batal
             </a>
+            <button type="submit" class="btn btn-dark">Hantar Lagu</button>
         </form>
     </div>
 

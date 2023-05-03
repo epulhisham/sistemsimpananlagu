@@ -11,6 +11,7 @@ use Illuminate\Http\Request;
 use App\Models\Song_category;
 use Illuminate\Support\Facades\DB;
 use App\Http\Controllers\Controller;
+use App\Models\Download;
 
 class DiterbitController extends Controller
 {
@@ -21,18 +22,15 @@ class DiterbitController extends Controller
      */
     public function index(Song $lagu_diterbit)
     {
-            $songs = Song::where('terbit',$lagu_diterbit->terbit = 1);
-            // $songs = Song::where('user_id',auth()->user()->id)->paginate(3);
+            $songs = Song::where('terbit',$lagu_diterbit->terbit = 1)->latest();
     
             if(request('search')){
     
                 $songs->where('artis', 'like', '%' . request('search') . '%')
                     ->orWhere('tajuk', 'like', '%' . request('search') . '%')
-                    ->orWhere('album', 'like', '%' . request('search') . '%')
-                    ->orWhere('pencipta_lagu', 'like', '%' . request('search') . '%')
-                    ->orWhere('penulis_lirik', 'like', '%' . request('search') . '%')
-                    ->orWhere('syarikat_rakaman', 'like', '%' . request('search') . '%')
-                    ->orWhere('kategori_lagu', 'like', '%' . request('search') . '%');
+                    ->orWhereHas('user', function($name){
+                        $name->where('name', 'like', '%' . request('search') . '%');
+                    });
             }
             
             return view ('diterbit.index',[
@@ -55,6 +53,12 @@ class DiterbitController extends Controller
         $songCount = $song->downloadCount; 
 
         $totalCount = Song::sum('downloadCount');
+
+        Download::create([
+            "user_id" => auth()->user()->id,
+            "song_id" => $song->id,
+            'tarikh' => $song->created_at
+        ]);
 
         return response()->json(['songCount'=>$songCount, 'totalCount'=>$totalCount]);
     }

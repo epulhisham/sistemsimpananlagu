@@ -32,6 +32,7 @@
           <main class="ms-sm-4 col-lg-11">
             @yield('container')
           </main>
+          @include('mainpage.layouts.footer')
         </div>
       </div>
     </div>

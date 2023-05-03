@@ -14,7 +14,7 @@
 
 <div class="row">
     <div class="col-md-6">
-        <form action="/lagu/diterbit">
+        <form action="/lagu-diterbit">
             <div class="input-group mb-3">
                 <input type="text" class="form-control" placeholder="Search" name="search" value="{{ request('search') }}">
                 <button class="btn btn-dark" type="submit">Cari</button>
@@ -24,46 +24,71 @@
 </div>
 
 <div class="table-responsive col-md-10">
-    <table class="table table-bordered">
-        <thead>
-            <tr>
-            <th scope="col">Bil.</th>
-            <th scope="col">Artis</th>
-            <th scope="col">Tajuk</th>
-            <th scope="col">Fail Lagu</th>
-            <th scope="col">Tindakan</th>
-            <th scope="col">Daripada</th>
-            </tr>
-        </thead>
-        <tbody>
-            @foreach ($songs as $song )
+    @if (count($songs) > 0)
+        <table class="table table-bordered">
+            <thead>
                 <tr>
-                <td>{{ $loop->iteration }}</td>
-                <td>{{ $song->artis }}</td>
-                <td>{{ $song->tajuk }}</td>
-                <td>
-                    <audio controls controlsList="nodownload" src="{{ $song->lagu }}"></audio>
-                </td>
-                <td>
-                    <a href="/lagu-diterbit/{{ $song->id }}" class="badge bg-success link-light">
-                        <span data-feather="file-text" class="align-text-bottom"></span>
-                    </a>
-                    <a href="{{ $song->lagu }}" target="_blank" download="{{ $song->lagu }}" onclick="download({{ $song->id }})" class="badge bg-dark link-light">
-                        <span data-feather="download" class="align-text-bottom"></span>
-                    </a>
-                </td>
-                <td>{{ $song->user->name }}</td>
+                <th scope="col">Bil.</th>
+                <th scope="col">Artis</th>
+                <th scope="col">Tajuk</th>
+                <th scope="col">Fail Lagu</th>
+                <th scope="col">Tindakan</th>
+                <th scope="col">Daripada</th>
                 </tr>
-            @endforeach
-        </tbody>
-    </table>
-    <div class="d-flex justify-content-end">
-        {{ $songs->links() }}
-    </div>
+            </thead>
+            <tbody>
+                @foreach ($songs as $song )
+                    <tr>
+                    <td>{{ $loop->iteration }}</td>
+                    <td>{{ $song->artis }}</td>
+                    <td>{{ $song->tajuk }}</td>
+                    <td>
+                        <audio controls controlsList="nodownload" src="{{ $song->lagu }}"></audio>
+                    </td>
+                    <td>
+                        <div class="d-flex align-item-center">
+                            <a href="/lagu-diterbit/{{ $song->id }}" class="badge bg-success link-light mx-1">
+                                <span data-feather="file-text" class="align-text-bottom"></span>
+                            </a>
+                            <a href="{{ $song->lagu }}" target="_blank" download="{{ $song->lagu }}" onClick="downloadSong({{ $song->id }})" class="badge bg-dark link-light mx-1">
+                                <span data-feather="download" class="align-text-bottom"></span>
+                            </a>
+                        </div>
+                    
+                    </td>
+                    <td>{{ $song->user->name }}</td>
+                    </tr>
+                @endforeach
+            </tbody>
+        </table>
+        <div class="d-flex justify-content-end">
+            {{ $songs->links() }}
+        </div>
+    @else
+        <table class="table table-bordered">
+            <thead>
+                <tr>
+                <th scope="col">Bil.</th>
+                <th scope="col">Artis</th>
+                <th scope="col">Tajuk</th>
+                <th scope="col">Fail Lagu</th>
+                <th scope="col">Tindakan</th>
+                <th scope="col">Daripada</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td colspan="7" class="text-center">
+                        Tiada Maklumat.
+                    </td>
+                </tr>
+            </tbody>
+        </table>
+    @endif
 </div>
 
 <script>
-    function download(id) {
+    function downloadSong(id) {
         $.ajax({
             type:'GET',
             url:"{{ route('downloadCount') }}",
@@ -72,22 +97,6 @@
             }
         })
     }
-    // $(document).ready(function(){
-
-    //     $(".downloader").click(function(){
-    //         alert('sasass')
-    //     var songid = $(this).attr('data-id');
-    //         console.log(songid)
-    //     $.ajax({
-    //         type:'GET',
-    //         url:"{{ route('downloadCount') }}",
-    //         data:{id:songid},
-    //         success:function(data){
-    //             console.log(data);
-    //         }
-    //     })
-    //     })
-    // })
 </script>
 
 @endsection

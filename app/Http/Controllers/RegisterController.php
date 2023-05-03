@@ -23,6 +23,7 @@ class RegisterController extends Controller
             'name'=>'required|max:255',
             'username'=>'required|min:3|max:255|unique:users',
             'email'=>'required|email|unique:users',
+            'phone_number'=>'required|unique:users|regex:/^[0-9]{10,11}$/',
             'password'=>'required|min:5|max:255',
             'choose_user_id'=>'required|not_in:0'
         ]);
@@ -39,6 +40,6 @@ class RegisterController extends Controller
         }
         
 
-        return redirect('/login')->with('success','Pendaftaran akaun berhasil! Sila Log Masuk');
+        return redirect('/login')->with('success','Pendaftaran akaun berhasil!');
     }
 }

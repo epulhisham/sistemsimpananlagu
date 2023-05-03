@@ -36,6 +36,7 @@
         <div class="row">
           @yield('loginContainer')
         </div>
+        @include('mainpage.layouts.footer')
     </div>
 
 

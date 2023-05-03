@@ -47,6 +47,11 @@ class AppServiceProvider extends ServiceProvider
             return $user->choose_user_id === 4;
         });
 
+        Gate::define('admin', function(User $user){
+
+            return $user->choose_user_id === 5;
+        });
+
 
     }
 }

@@ -9,7 +9,7 @@ use App\Models\Status;
 use App\Models\Country;
 use App\Models\Keputusan;
 use App\Models\Song_category;
-
+use App\Models\User;
 use Illuminate\Database\Seeder;
 
 class DatabaseSeeder extends Seeder
@@ -26,7 +26,7 @@ class DatabaseSeeder extends Seeder
         // \App\Models\User::factory()->create([
         //     'name' => 'Test User',
         //     'email' => 'test@example.com',
-        // ]);
+        // ])
         Status::create([
 
             'status_lagu' => 'Lagu Lengkap '
@@ -44,7 +44,7 @@ class DatabaseSeeder extends Seeder
         ]);
         Choose_user::create([
 
-            'pilih_pengguna' => 'Syarikat Stesen'
+            'pilih_pengguna' => 'Stesen Radio'
         ]);
         
         Choose_user::create([
@@ -54,7 +54,21 @@ class DatabaseSeeder extends Seeder
 
         Choose_user::create([
 
-            'pilih_pengguna' => 'Pelulus'
+            'pilih_pengguna' => 'Admin'
+        ]);
+
+        Choose_user::create([
+
+            'pilih_pengguna' => 'Super Admin'
+        ]);
+
+        User::create([
+            'name' => 'Admin SSL',
+            'username' => 'adminSSL',
+            'email' => 'sslAdmin@rtm.com',
+            'password' => bcrypt('Rtm@2023'),
+            'isApproved' => 1,
+            'choose_user_id' => 5 
         ]);
 
         Keputusan::create([
@@ -97,6 +111,12 @@ class DatabaseSeeder extends Seeder
 
             'id'=> 4,
             'kategori' => 'Tamil'
+        ]);
+
+        Song_category::create([
+
+            'id'=> 5,
+            'kategori' => 'Lain-lain'
         ]);
 
         $countries = [
