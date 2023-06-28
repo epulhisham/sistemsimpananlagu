@@ -35,7 +35,7 @@ class DiterbitController extends Controller
             
             return view ('diterbit.index',[
     
-                "songs"=>$songs->paginate(3),
+                "songs"=>$songs->paginate(20),
                 'statuses'=>Status::all(),
                 'penilais'=>Penilai::all(),
                 'countries'=>Country::all(),

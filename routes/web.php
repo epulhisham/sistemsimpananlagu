@@ -1,8 +1,6 @@
 <?php
 
 use App\Http\Controllers\AdminController;
-use Illuminate\Http\Request;
-use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\LaguController;
 use App\Http\Controllers\UserController;
@@ -10,7 +8,6 @@ use App\Http\Controllers\LoginController;
 use App\Http\Controllers\PelulusController;
 use App\Http\Controllers\PenilaiController;
 use App\Http\Controllers\DiterbitController;
-use App\Http\Controllers\ForgotPasswordController;
 use App\Http\Controllers\RegisterController;
 
 /*
@@ -46,6 +43,7 @@ Route::resource('/lagu', LaguController::class)->middleware('syarikat_rakam')->m
 
 //user admin and superAdmin
 Route::resource('/pelulus-lagu', PelulusController::class)->middleware('auth');
+Route::get('/lagu-tak-lulus',[PelulusController::class,'index_taklulus'])->middleware('auth');
 Route::get('/statistik',[PelulusController::class,'index_statistik'])->middleware('auth');
 
 //user penilai

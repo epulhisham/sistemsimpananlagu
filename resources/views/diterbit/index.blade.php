@@ -34,6 +34,7 @@
                 <th scope="col">Fail Lagu</th>
                 <th scope="col">Tindakan</th>
                 <th scope="col">Daripada</th>
+                <th scope="col">Tarikh Diterbitkan</th>
                 </tr>
             </thead>
             <tbody>
@@ -57,6 +58,7 @@
                     
                     </td>
                     <td>{{ $song->user->name }}</td>
+                    <td>{{ $song->updated_at }}</td>
                     </tr>
                 @endforeach
             </tbody>
@@ -74,6 +76,7 @@
                 <th scope="col">Fail Lagu</th>
                 <th scope="col">Tindakan</th>
                 <th scope="col">Daripada</th>
+                <th scope="col">Tarikh Diterbitkan</th>
                 </tr>
             </thead>
             <tbody>

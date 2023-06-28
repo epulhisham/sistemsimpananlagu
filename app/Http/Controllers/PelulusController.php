@@ -12,6 +12,7 @@ use App\Models\Keputusan;
 use Illuminate\Http\Request;
 use App\Models\Song_category;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Storage;
 
 class PelulusController extends Controller
 {
@@ -34,13 +35,15 @@ class PelulusController extends Controller
                 ->orWhere('syarikat_rakaman', 'like', '%' . request('search') . '%')
                 ->orWhereHas('penilai', function($pilih_penilai){
                     $pilih_penilai->where('pilih_penilai', 'like', '%' . request('search') . '%');
+                })
+                ->orWhereHas('keputusan', function($pilih_keputusan){
+                    $pilih_keputusan->where('pilih_keputusan', 'like', '%' . request('search') . '%');
                 });
         }
-        
 
         return view ('pelulus.index',[
 
-            "songs"=>$songs->paginate(5),
+            "songs"=>$songs->paginate(20),
             'statuses'=>Status::all(),
             'penilais'=>Penilai::all(),
             'countries'=>Country::all(),
@@ -70,7 +73,7 @@ class PelulusController extends Controller
 
         return view ('pelulus.index_meluluskan',[
 
-            "songs"=>$songs->paginate(3),
+            "songs"=>$songs->paginate(5),
             'statuses'=>Status::all(),
             'penilais'=>Penilai::all(),
             'countries'=>Country::all(),
@@ -106,6 +109,37 @@ class PelulusController extends Controller
 
         ]);
     }
+
+    public function index_taklulus(Song $lagu_tak_lulus)
+    {
+        $songs = Song::where('keputusan_id',$lagu_tak_lulus->keputusan_id = 2);
+
+        $songs->where(function($query) {
+            $query->where('keputusan_id', 2);
+        })->where(function($query) {
+            $query->where('artis', 'like', '%' . request('search') . '%')
+                ->orWhere('tajuk', 'like', '%' . request('search') . '%')
+                ->orWhere('album', 'like', '%' . request('search') . '%')
+                ->orWhere('pencipta_lagu', 'like', '%' . request('search') . '%')
+                ->orWhere('penulis_lirik', 'like', '%' . request('search') . '%')
+                ->orWhere('syarikat_rakaman', 'like', '%' . request('search') . '%')
+                ->orWhereHas('penilai', function($pilih_penilai){
+                    $pilih_penilai->where('pilih_penilai', 'like', '%' . request('search') . '%');
+                });
+        });
+        
+
+        return view ('pelulus.index_tak_lulus',[
+
+            "songs"=>$songs->paginate(10),
+            'statuses'=>Status::all(),
+            'penilais'=>Penilai::all(),
+            'countries'=>Country::all(),
+            'keputusans'=>Keputusan::all()
+            
+        ]);
+    }
+
 
     /**
      * Show the form for creating a new resource.
@@ -198,8 +232,20 @@ class PelulusController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function destroy($id)
+    public function destroy(Song $pelulus_lagu)
     {
-        //
+        if($pelulus_lagu->lagu){
+            // Storage::delete($lagu->lagu);     
+            Storage::delete(str_replace('https://d38gy8luw6hjwu.cloudfront.net/',"",$pelulus_lagu->lagu));
+        }
+        
+        if($pelulus_lagu->fail_lagu){
+            // Storage::delete($lagu->fail_lagu);
+            Storage::delete(str_replace('https://d38gy8luw6hjwu.cloudfront.net/',"",$pelulus_lagu->fail_lagu)); 
+        }
+
+        Song::destroy($pelulus_lagu->id);
+        return redirect('/pelulus-lagu')->withErrors($pelulus_lagu)->withInput()->with('success', 'Lagu telah dipadam!');
+
     }
 }

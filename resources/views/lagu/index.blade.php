@@ -27,6 +27,7 @@
 </div>
 
 <div class="table-responsive-lg col-md-11">
+    <div style="overflow-x:auto;">
     @if (count($songs) > 0)
         <table class="table table-bordered">
             <thead>
@@ -97,6 +98,7 @@
             </tbody>
         </table>
     @endif
+    </div>
 </div>
 
 

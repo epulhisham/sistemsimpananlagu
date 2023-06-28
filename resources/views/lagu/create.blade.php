@@ -114,7 +114,7 @@
                     <input class="form-control @error('lagu') is-invalid @enderror" type="file" id="lagu" name="lagu" multiple>
                     @error('lagu')
                     <div class="invalid-feedback">
-                        {{ 'Sila Pilih Audio Lagu' }}
+                        {{ $message }}
                     </div>      
                     @enderror
                 </div>
@@ -140,9 +140,28 @@
                 @enderror
             </div>
 
-            <a href="/lagu" class="btn btn-danger border-0" onclick="return confirm('Adakah anda pasti untuk batal?')">
+            <a href="/lagu" class="btn btn-danger border-0" data-bs-toggle="modal" data-bs-target="#cancelModal">
                 Batal
             </a>
+            <!-- Cancel Modal -->
+            <div class="modal fade" id="cancelModal" tabindex="-1" aria-labelledby="cancelModalLabel" aria-hidden="true">
+                <div class="modal-dialog">
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            <h5 class="modal-title" id="cancelModalLabel">Sahkan Pembatalan</h5>
+                            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                        </div>
+                        <div class="modal-body">
+                            <p>Adakah anda pasti untuk batal untuk mengisi?</p>
+                        </div>
+                        <div class="modal-footer">
+                            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Tidak</button>
+                            <a href="/lagu" class="btn btn-danger">Ya</a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
             <button type="submit" class="btn btn-dark">Hantar Lagu</button>
         </form>
     </div>

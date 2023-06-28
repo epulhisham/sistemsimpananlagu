@@ -37,7 +37,7 @@ class LaguController extends Controller
 
         return view ('lagu.index',[
 
-            "songs"=>$songs->paginate(3),
+            "songs"=>$songs->paginate(5),
             'statuses'=>Status::all(),
             'penilais'=>Penilai::all(),
             'countries'=>Country::all(),
@@ -81,7 +81,7 @@ class LaguController extends Controller
             'song_category_id' => 'required|not_in:0',
             'country_id' => 'required|not_in:0',
             'catatan' => 'max:255',
-            'lagu'=>'required|mimes:audio/mpeg,mpga,mp3,wav,aac',
+            'lagu'=>'required|mimes:audio/mpeg,mpga,mp3,wav,aac,flac|max:150000',
             'fail_lagu'=>'mimes:pdf,docx',
             'tarikh_diterima' => '',
             'tarikh_dinilai' => '',
@@ -187,7 +187,7 @@ class LaguController extends Controller
             'song_category_id' => 'not_in:0',
             'country_id' => 'not_in:0',
             'catatan' => 'max:255',
-            'lagu'=>'mimes:audio/mpeg,mpga,mp3,wav,aac',
+            'lagu'=>'mimes:audio/mpeg,mpga,mp3,wav,aac,flac|max:150000',
             'fail_lagu'=>'mimes:pdf,docx',   
             'tarikh_diterima' => '',
             'tarikh_dinilai' => '',
