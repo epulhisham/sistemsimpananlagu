@@ -19,25 +19,49 @@ class LaguController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function index()
+    public function index(Request $request)
     {
         $songs = Song::where('user_id',auth()->user()->id)->orderby('created_at','desc');
 
-        if(request('search')){
-            $songs->where(function ($query) {
-                $query->where('artis', 'like', '%' . request('search') . '%')
-                    ->orWhere('tajuk', 'like', '%' . request('search') . '%')
-                    ->orWhere('album', 'like', '%' . request('search') . '%')
-                    ->orWhere('pencipta_lagu', 'like', '%' . request('search') . '%')
-                    ->orWhere('penulis_lirik', 'like', '%' . request('search') . '%')
-                    ->orWhere('syarikat_rakaman', 'like', '%' . request('search') . '%');
-            });
+        if ($request->has('search_query') && $request->has('search_field')) {
+            $searchField = $request->input('search_field');
+            $searchQuery = $request->input('search_query');
+    
+            if ($searchField === 'song_category') {
+                $songs->whereHas('song_category', function ($query) use ($searchQuery) {
+                    $query->where('kategori', 'like', '%' . $searchQuery . '%');
+                });
+            } elseif ($searchField === 'country') {
+                $songs->whereHas('country', function ($query) use ($searchQuery) {
+                    $query->where('name', 'like', '%' . $searchQuery . '%');
+                });
+            }  elseif($searchField === 'tarikh_dinilai') {
+                if ($searchQuery === 'belum dinilai') {
+                    $songs->whereNull('tarikh_dinilai');
+                } elseif ($searchQuery === 'telah dinilai') {
+                    $songs->whereNotNull('tarikh_dinilai');
+                }
+            } elseif ($searchField === 'keputusan') {
+                if (strcasecmp($searchQuery, 'Lulus') === 0) {
+                    $songs->where(function ($query) {
+                        $query->whereHas('keputusan', function ($subQuery) {
+                            $subQuery->where('pilih_keputusan', 'LIKE', 'Lulus');
+                        })->orWhereDoesntHave('keputusan');
+                    });
+                } else {
+                    $songs->whereHas('keputusan', function ($query) use ($searchQuery) {
+                        $query->where('pilih_keputusan', 'like', '%' . $searchQuery . '%');
+                    });
+                }
+            }else {
+                $songs->where($searchField, 'like', '%' . $searchQuery . '%');
+            }
         }
         
 
         return view ('lagu.index',[
 
-            "songs"=>$songs->paginate(3),
+            "songs"=>$songs->paginate(5),
             'statuses'=>Status::all(),
             'penilais'=>Penilai::all(),
             'countries'=>Country::all(),
@@ -53,13 +77,17 @@ class LaguController extends Controller
      */
     public function create()
     {
+        $categories = Song_category::where('kategori', '!=', 'Lain-lain')->get();
+        $lainLain = Song_category::where('kategori', 'Lain-lain')->first();
+        $songCategories = $categories->concat([$lainLain]);
+
         return view('lagu.create',[
 
             'statuses'=>Status::all(),
             'penilais'=>Penilai::all(),
             'countries'=>Country::all(),
             'keputusans'=>Keputusan::all(),
-            'song_categories'=>Song_category::all()
+            'song_categories'=>$songCategories
         ]);
     }
 
@@ -75,14 +103,15 @@ class LaguController extends Controller
             'artis' => 'required|max:255',
             'tajuk' => 'required|max:255',
             'album' => 'required|max:255',
+            'ref_number' => 'max:255',
             'pencipta_lagu' => 'required|max:255',
             'penulis_lirik' => 'required|max:255',
             'syarikat_rakaman' => 'required|max:255',
             'song_category_id' => 'required|not_in:0',
             'country_id' => 'required|not_in:0',
             'catatan' => 'max:255',
-            'lagu'=>'required|mimes:audio/mpeg,mpga,mp3,wav,aac',
-            'fail_lagu'=>'mimes:pdf,docx',
+            'lagu'=>'required|mimes:audio/mpeg,mpga,mp3,wav,aac,flac|max:150000',
+            'fail_lagu'=>'mimes:pdf,docx,png,jpeg',
             'tarikh_diterima' => '',
             'tarikh_dinilai' => '',
             'tarikh_diluluskan' => '',      
@@ -154,13 +183,18 @@ class LaguController extends Controller
      */
     public function edit(Song $lagu)
     {
+
+        $categories = Song_category::where('kategori', '!=', 'Lain-lain')->get();
+        $lainLain = Song_category::where('kategori', 'Lain-lain')->first();
+        $songCategories = $categories->concat([$lainLain]);
+
         return view('lagu.edit',[
 
             'song'=>$lagu,
             'statuses'=>Status::all(),
             'countries'=>Country::all(),
             'keputusans'=>Keputusan::all(),
-            'song_categories'=>Song_category::all()
+            'song_categories'=>$songCategories
         ]);
         
     }
@@ -181,14 +215,15 @@ class LaguController extends Controller
             'artis' => 'required|max:255',
             'tajuk' => 'required|max:255',
             'album' => 'required|max:255',
+            'ref_number' => 'max:255',
             'pencipta_lagu' => 'required|max:255',
             'penulis_lirik' => 'required|max:255',
             'syarikat_rakaman' => 'required|max:255',
             'song_category_id' => 'not_in:0',
             'country_id' => 'not_in:0',
             'catatan' => 'max:255',
-            'lagu'=>'mimes:audio/mpeg,mpga,mp3,wav,aac',
-            'fail_lagu'=>'mimes:pdf,docx',   
+            'lagu'=>'mimes:audio/mpeg,mpga,mp3,wav,aac,flac|max:150000',
+            'fail_lagu'=>'mimes:pdf,docx,png,jpeg',   
             'tarikh_diterima' => '',
             'tarikh_dinilai' => '',
             'tarikh_diluluskan' => '',   

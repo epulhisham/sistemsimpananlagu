@@ -8,6 +8,7 @@
     <link href="/css/bootstrap.min.css" rel="stylesheet">
     <link href="/css/table.css" rel="stylesheet">
     <link href="/css/dashboard.css" rel="stylesheet">
+    <link href="/css/sidebars.css" rel="stylesheet">
     {{-- <link href="/css/sticky-footer.css" rel="stylesheet"> --}}
     <script src="https://unpkg.com/feather-icons"></script>
     

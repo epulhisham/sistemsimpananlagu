@@ -52,13 +52,32 @@
                         <a href="/admin/tukar-password/{{ $user->id }}" class="badge bg-dark link-light">
                             <span data-feather="edit-3" class="align-text-bottom"></span>
                         </a>
-                        <form action="/admin/{{ $user->id }}" method="post" class="d-inline">
-                            @method('delete')
-                            @csrf
-                            <button class="badge bg-danger border-0" onclick="return confirm('Are you sure?')">
-                                <span data-feather="trash" class="align-text-bottom"></span>
-                            </button>
-                        </form>
+                        <button class="badge bg-danger border-0" data-bs-toggle="modal" data-bs-target="#deleteUserModal{{ $user->id }}">
+                            <span data-feather="trash" class="align-text-bottom"></span>
+                        </button>
+                            <!-- Delete User Modal -->
+                            <div class="modal fade" id="deleteUserModal{{ $user->id }}" tabindex="-1" aria-labelledby="deleteUserModalLabel{{ $user->id }}" aria-hidden="true">
+                                <div class="modal-dialog">
+                                    <div class="modal-content">
+                                        <div class="modal-header">
+                                            <h5 class="modal-title" id="deleteUserModalLabel{{ $user->id }}">Mengesahkan Padam</h5>
+                                            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                                        </div>
+                                        <div class="modal-body">
+                                            <p>Adakah anda pasti untuk memadam pengguna ini?</p>
+                                        </div>
+                                        <div class="modal-footer">
+                                            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Batal</button>
+                                            <form action="/admin/{{ $user->id }}" method="post" class="d-inline">
+                                                @method('delete')
+                                                @csrf
+                                                <button type="submit" class="btn btn-danger">Padam</button>
+                                            </form>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
                     </td>
                     <td>
                         @if ($user->isApproved == 0)

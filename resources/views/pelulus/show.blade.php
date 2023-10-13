@@ -70,7 +70,12 @@
         <div class="mb-3">
             <label for="fail_lagu" class="form-label">Fail Lagu</label>
             <div class="row">
-                <a href="{{ $song->fail_lagu }}" class="badge bg-dark" target="_blank"><span data-feather="download" class="align-text-bottom"></span></a>
+                <?php
+                    $url = $song->fail_lagu;
+                    $filename = pathinfo($url, PATHINFO_FILENAME);
+                    $fileExtension = pathinfo($url, PATHINFO_EXTENSION);
+                ?>
+                <a href="{{ asset($song->fail_lagu) }}" download target="_blank">{{ $filename }} ({{ strtoupper($fileExtension) }})</a>
             </div>
         </div>
         {{-- <div class="mb-3">

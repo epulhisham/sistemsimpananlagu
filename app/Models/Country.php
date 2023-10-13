@@ -16,6 +16,6 @@ class Country extends Model
     ];
 
     public function song (){
-        return $this->hasMany(Song::class);
+        return $this->hasMany(Song::class, 'song_id');
     }
 }

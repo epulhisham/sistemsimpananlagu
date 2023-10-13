@@ -1,8 +1,6 @@
 <?php
 
 use App\Http\Controllers\AdminController;
-use Illuminate\Http\Request;
-use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\LaguController;
 use App\Http\Controllers\UserController;
@@ -10,8 +8,8 @@ use App\Http\Controllers\LoginController;
 use App\Http\Controllers\PelulusController;
 use App\Http\Controllers\PenilaiController;
 use App\Http\Controllers\DiterbitController;
-use App\Http\Controllers\ForgotPasswordController;
 use App\Http\Controllers\RegisterController;
+use App\Http\Controllers\SettingController;
 
 /*
 |--------------------------------------------------------------------------
@@ -46,7 +44,15 @@ Route::resource('/lagu', LaguController::class)->middleware('syarikat_rakam')->m
 
 //user admin and superAdmin
 Route::resource('/pelulus-lagu', PelulusController::class)->middleware('auth');
+Route::get('/lagu-tak-lulus',[PelulusController::class,'index_taklulus'])->middleware('auth');
 Route::get('/statistik',[PelulusController::class,'index_statistik'])->middleware('auth');
+Route::get('/tetapan',[SettingController::class,'setting'])->middleware('auth');
+Route::get('/tetapan/kategori-lagu',[SettingController::class,'song_category'])->middleware('auth');
+Route::get('/tetapan/kategori-lagu/tambah-kategori-lagu',[SettingController::class,'create_song_category'])->middleware('auth');
+Route::post('/tetapan/kategori-lagu',[SettingController::class,'store_song_category'])->middleware('auth');
+Route::get('/tetapan/kategori-lagu/{song_category:id}/edit-kategori-lagu',[SettingController::class,'edit_song_category'])->middleware('auth');
+Route::put('/tetapan/kategori-lagu/{song_category:id}',[SettingController::class,'update_song_category'])->middleware('auth');
+Route::delete('/tetapan/kategori-lagu/{song_category:id}',[SettingController::class,'destroy_song_category'])->middleware('auth');
 
 //user penilai
 Route::resource('/penilai-lagu',PenilaiController::class)->middleware('penilai');

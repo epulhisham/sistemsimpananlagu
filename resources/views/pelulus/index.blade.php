@@ -17,15 +17,35 @@
 <div class="row">
     <div class="col-md-6">
         <form action="/pelulus-lagu">
-            <div class="input-group mb-3">
-                <input type="text" class="form-control" placeholder="Search" name="search" value="{{ request('search') }}">
-                <button class="btn btn-dark" type="submit">Cari</button>
-            </div>
+            <form action="/pelulus-lagu" method="GET">
+                <div class="input-group mb-3">
+                    <select class="form-select" name="search_field">
+                        <option value="artis"{{ request('search_field') === 'artis' ? ' selected' : '' }}>Artis</option>
+                        <option value="tajuk"{{ request('search_field') === 'tajuk' ? ' selected' : '' }}>Tajuk</option>
+                        <option value="album"{{ request('search_field') === 'album' ? ' selected' : '' }}>Album</option>
+                        <option value="ref_number"{{ request('search_field') === 'ref_number' ? ' selected' : '' }}>No. Rujukan/ No. Album</option>
+                        <option value="pencipta_lagu"{{ request('search_field') === 'pencipta_lagu' ? ' selected' : '' }}>Pencipta Lagu</option>
+                        <option value="penulis_lirik"{{ request('search_field') === 'penulis_lirik' ? ' selected' : '' }}>Penulis Lirik</option>
+                        <option value="syarikat_rakaman"{{ request('search_field') === 'syarikat_rakaman' ? ' selected' : '' }}>Syarikat Rakaman</option>
+                        <option value="song_category"{{ request('search_field') === 'song_category' ? ' selected' : '' }}>Kategori Lagu</option>
+                        <option value="country"{{ request('search_field') === 'country' ? ' selected' : '' }}>Negara</option>
+                        <option value="catatan"{{ request('search_field') === 'catatan' ? ' selected' : '' }}>Catatan</option>
+                        <option value="user"{{ request('search_field') === 'user' ? ' selected' : '' }}>Pengguna</option>
+                        <option value="penilai"{{ request('search_field') === 'penilai' ? ' selected' : '' }}>Nama Penilai</option>
+                        <option value="tarikh_dinilai"{{ request('search_field') === 'tarikh_dinilai' ? ' selected' : '' }}>Penilaian</option>
+                        <option value="keputusan"{{ request('search_field') === 'keputusan' ? ' selected' : '' }}>Keputusan</option>
+                        <option value="terbit"{{ request('search_field') === 'terbit' ? ' selected' : '' }}>Terbit</option>
+                    </select>
+                    <input type="text" class="form-control" placeholder="Search" name="search_query" value="{{ request('search_query') }}">
+                    <button class="btn btn-dark" type="submit">Cari</button>
+                </div>
+            </form>
         </form>
     </div>
 </div>
 
 <div class="table-responsive-lg col-md-11">
+    <div style="overflow-x: auto;">
     @if (count($songs) > 0)
         <table class="table table-bordered">
             <thead>
@@ -33,8 +53,18 @@
                 <th scope="col">Bil.</th>
                 <th scope="col">Artis</th>
                 <th scope="col">Tajuk</th>
+                <th scope="col">Album</th>
+                <th scope="col">No. Rujukan/ No. Album</th>
+                <th scope="col">Pencipta Lagu</th>
+                <th scope="col">Penulis Lirik</th>
+                <th scope="col">Syarikat Rakaman</th>
+                <th scope="col">Kategori Lagu</th>
+                <th scope="col">Negara</th>
+                <th scope="col">Catatan</th>
                 <th scope="col">Lagu</th>
+                <th scope="col">Fail Lagu</th>
                 <th scope="col">Tindakan</th>
+                <th scope="col">Pengguna</th>
                 <th scope="col">Nama Penilai</th>
                 <th scope="col">Penilaian</th>
                 <th scope="col">Keputusan</th>
@@ -47,8 +77,26 @@
                         <td>{{ $songs->firstItem() + $loop->index }}</td>
                         <td>{{ $song->artis }}</td>
                         <td>{{ $song->tajuk }}</td>
+                        <td>{{ $song->album }}</td>
+                        <td>{{ $song->ref_number }}</td>
+                        <td>{{ $song->pencipta_lagu }}</td>
+                        <td>{{ $song->penulis_lirik }}</td>
+                        <td>{{ $song->syarikat_rakaman }}</td>
+                        <td>{{ $song->song_category->kategori }}</td>
+                        <td>{{ $song->country->name }}</td>
+                        <td>{{ $song->catatan }}</td>
                         <td>
-                            <audio controls src="{{ $song->lagu }}"></audio>
+                            <div class="audio-container">
+                                <audio controls src="{{ $song->lagu }}"></audio>
+                            </div>
+                        </td>
+                        <td>
+                            <?php
+                            $url = $song->fail_lagu;
+                            $filename = pathinfo($url, PATHINFO_FILENAME);
+                            $fileExtension = pathinfo($url, PATHINFO_EXTENSION);
+                            ?>
+                            <a href="{{ asset($song->fail_lagu) }}" download target="_blank">{{ $filename }} ({{ strtoupper($fileExtension) }})</a>
                         </td>
                         <td>
                             <div class="d-flex align-item-center">
@@ -61,15 +109,35 @@
                                 <a href="/pelulus-lagu/{{ $song->id }}/edit" class="badge bg-info link-light mx-1">
                                     <span data-feather="edit" class=""></span>
                                 </a>
-                                <form action="/pelulus-lagu/{{ $song->id }}" method="post" class="d-inline">
-                                    @method('delete')
-                                    @csrf
-                                    <button class="badge bg-danger border-0" onclick="return confirm('Are you sure?')">
-                                        <span data-feather="trash" class="align-text-bottom"></span>
-                                    </button>
-                                </form>
+                                <button class="badge bg-danger border-0" data-bs-toggle="modal" data-bs-target="#deleteSongModal{{ $song->id }}">
+                                    <span data-feather="trash" class="align-text-bottom"></span>
+                                </button>
+                                
+                                <!-- Delete Song Modal -->
+                                <div class="modal fade" id="deleteSongModal{{ $song->id }}" tabindex="-1" aria-labelledby="deleteSongModalLabel{{ $song->id }}" aria-hidden="true">
+                                    <div class="modal-dialog">
+                                        <div class="modal-content">
+                                            <div class="modal-header">
+                                                <h5 class="modal-title" id="deleteSongModalLabel{{ $song->id }}">Mengesahkan Padam</h5>
+                                                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                                            </div>
+                                            <div class="modal-body">
+                                                <p>Adakah anda pasti untuk memadam lagu ini?</p>
+                                            </div>
+                                            <div class="modal-footer">
+                                                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Batal</button>
+                                                <form id="deleteSongForm{{ $song->id }}" method="POST" action="/pelulus-lagu/{{ $song->id }}" class="d-inline">
+                                                    @method('delete')
+                                                    @csrf
+                                                    <button type="submit" class="btn btn-danger">Padam</button>
+                                                </form>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
                             </div>
                         </td>
+                        <td>{{ $song->user->name }}</td>
                         <td>
                             @if ( $song->penilai_id == null)
                                 Belum dipilih
@@ -109,32 +177,38 @@
         <table class="table table-bordered">
             <thead>
                 <tr>
-                <th scope="col">Bil.</th>
-                <th scope="col">Artis</th>
-                <th scope="col">Tajuk</th>
-                <th scope="col">Lagu</th>
-                <th scope="col">Tindakan</th>
-                <th scope="col">Nama Penilai</th>
-                <th scope="col">Penilaian</th>
-                <th scope="col">Keputusan</th>
+                    <th scope="col">Bil.</th>
+                    <th scope="col">Artis</th>
+                    <th scope="col">Tajuk</th>
+                    <th scope="col">Album</th>
+                    <th scope="col">No. Rujukan/ No. Album</th>
+                    <th scope="col">Pencipta Lagu</th>
+                    <th scope="col">Penulis Lirik</th>
+                    <th scope="col">Syarikat Rakaman</th>
+                    <th scope="col">Kategori Lagu</th>
+                    <th scope="col">Negara</th>
+                    <th scope="col">Catatan</th>
+                    <th scope="col">Lagu</th>
+                    <th scope="col">Fail Lagu</th>
+                    <th scope="col">Tindakan</th>
+                    <th scope="col">Pengguna</th>
+                    <th scope="col">Nama Penilai</th>
+                    <th scope="col">Penilaian</th>
+                    <th scope="col">Keputusan</th>
+                    <th scope="col">Terbit</th>
                 </tr>
             </thead>
             <tbody>
                 <tr>
-                    <td colspan="8" class="text-center">Tiada Maklumat</td>
+                    <td colspan="19" class="text-center">Tiada Maklumat</td>
                 </tr>
             </tbody>
         </table>
         
     @endif
+    </div>
 
 </div>
-
-
-
-
-
-
 
 
 @endsection

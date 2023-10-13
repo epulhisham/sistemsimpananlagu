@@ -52,20 +52,7 @@
             <a href="{{ url()->previous() }}" class="btn btn-dark link-light">
                 <span data-feather="arrow-left"></span>
                 Kembali
-            </a>
-            <a href="/admin/{{ $user->id }}/edit" class="btn btn-info link-light">
-                <span data-feather="edit"></span>
-                Kemaskini
-            </a>
-            <form action="/admin/{{ $user->id }}" method="post" class="d-inline">
-                @method('delete')
-                @csrf
-                <button class="btn btn-danger border-0" onclick="return confirm('Are you sure?')">
-                    <span data-feather="trash"></span>
-                    Padam
-                </button>
-            </form>
-        
+            </a>        
     </div>
 
 

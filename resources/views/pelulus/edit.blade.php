@@ -58,6 +58,13 @@
                     </div>
                 </div>
                 <div class="mb-3">
+                    <label for="tarikh_dinilai" class="form-label">Lagu dinilai</label>
+                    <div class="form-check form-switch">
+                        <input type="checkbox" id="tarikh_dinilai" name="tarikh_dinilai" class="form-check-input" value="1" {{ old('tarikh_dinilai', $song->tarikh_dinilai) ? 'checked' : '' }}>
+                        <label class="form-check-label" for="tarikh_dinilai">Lagu telah dinilai</label>
+                    </div>
+                </div>                               
+                <div class="mb-3">
                     <label for="tarikh_diluluskan" class="form-label">Tarikh</label>
                     <input type="date" class="form-control @error('tarikh_diluluskan') is-invalid @enderror" id="tarikh_diluluskan" name="tarikh_diluluskan" required autofocus value="{{ old('tarikh_diluluskan',$song->tarikh_diluluskan) }}">
                     @error('tarikh_diluluskan')

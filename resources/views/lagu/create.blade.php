@@ -37,6 +37,15 @@
                 @enderror
             </div>
             <div class="mb-3">
+                <label for="ref_number" class="form-label">No. Rujukan/ No. Album</label>
+                <input type="text" class="form-control @error('ref_number') is-invalid @enderror" id="ref_number" name="ref_number" required autofocus value="{{ old('ref_number') }}">
+                @error('ref_number')
+                    <div class="invalid-feedback">
+                        {{ $message }}
+                    </div>      
+                @enderror
+            </div>
+            <div class="mb-3">
                 <label for="pencipta_lagu" class="form-label">Pencipta Lagu</label>
                 <input type="text" class="form-control @error('pencipta_lagu') is-invalid @enderror" id="pencipta_lagu" name="pencipta_lagu" required autofocus value="{{ old('pencipta_lagu') }}">
                 @error('pencipta_lagu')
@@ -114,7 +123,7 @@
                     <input class="form-control @error('lagu') is-invalid @enderror" type="file" id="lagu" name="lagu" multiple>
                     @error('lagu')
                     <div class="invalid-feedback">
-                        {{ 'Sila Pilih Audio Lagu' }}
+                        {{ $message }}
                     </div>      
                     @enderror
                 </div>
@@ -140,9 +149,28 @@
                 @enderror
             </div>
 
-            <a href="/lagu" class="btn btn-danger border-0" onclick="return confirm('Adakah anda pasti untuk batal?')">
+            <a href="/lagu" class="btn btn-danger border-0" data-bs-toggle="modal" data-bs-target="#cancelModal">
                 Batal
             </a>
+            <!-- Cancel Modal -->
+            <div class="modal fade" id="cancelModal" tabindex="-1" aria-labelledby="cancelModalLabel" aria-hidden="true">
+                <div class="modal-dialog">
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            <h5 class="modal-title" id="cancelModalLabel">Sahkan Pembatalan</h5>
+                            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                        </div>
+                        <div class="modal-body">
+                            <p>Adakah anda pasti untuk batal untuk mengisi?</p>
+                        </div>
+                        <div class="modal-footer">
+                            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Tidak</button>
+                            <a href="/lagu" class="btn btn-danger">Ya</a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
             <button type="submit" class="btn btn-dark">Hantar Lagu</button>
         </form>
     </div>

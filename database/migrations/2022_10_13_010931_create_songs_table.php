@@ -24,6 +24,7 @@ return new class extends Migration
             $table->string('artis');
             $table->string('tajuk');
             $table->string('album');
+            $table->string('ref_number')->nullable();
             $table->string('pencipta_lagu');
             $table->string('penulis_lirik');
             $table->string('syarikat_rakaman');

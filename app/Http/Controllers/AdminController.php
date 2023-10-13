@@ -32,7 +32,7 @@ class AdminController extends Controller
 
         return view ('admin.index',[
 
-            "users"=>$users->paginate(5)
+            "users"=>$users->paginate(10)
             
         ]);
     }

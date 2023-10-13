@@ -47,7 +47,7 @@ class PenilaiController extends Controller
         
         return view ('penilai.index',[
 
-            "songs"=>$songs->paginate(3),
+            "songs"=>$songs->paginate(20),
             'statuses'=>Status::all(),
             'penilais'=>Penilai::all(),
             'countries'=>Country::all(),
@@ -86,7 +86,7 @@ class PenilaiController extends Controller
 
         return view ('penilai.index_lagudinilai',[
 
-            "songs"=>$songs->paginate(3),
+            "songs"=>$songs->paginate(20),
             'statuses'=>Status::all(),
             'penilais'=>Penilai::all(),
             'countries'=>Country::all(),
@@ -127,7 +127,7 @@ class PenilaiController extends Controller
 
         return view ('penilai.index_belumdinilai',[
 
-            "songs"=>$songs->paginate(3),
+            "songs"=>$songs->paginate(20),
             'statuses'=>Status::all(),
             'penilais'=>Penilai::all(),
             'countries'=>Country::all(),
@@ -138,7 +138,11 @@ class PenilaiController extends Controller
 
     public function index_lulus(Song $lagu_lulus)
     {
-        $songs = Song::where('keputusan_id',$lagu_lulus->keputusan_id = 1);
+        $songs = Song::where('keputusan_id',$lagu_lulus->keputusan_id = 1)
+        ->whereHas('penilai', function($query){
+            $query->where('user_id', auth()->user()->id);
+        })
+        ->latest();
 
         $songs->where(function($query) {
             $query->where('keputusan_id', 1);
@@ -157,7 +161,7 @@ class PenilaiController extends Controller
 
         return view ('penilai.index_lulus',[
 
-            "songs"=>$songs->paginate(3),
+            "songs"=>$songs->paginate(20),
             'statuses'=>Status::all(),
             'penilais'=>Penilai::all(),
             'countries'=>Country::all(),
@@ -168,7 +172,12 @@ class PenilaiController extends Controller
 
     public function index_taklulus(Song $lagu_taklulus)
     {
-        $songs = Song::where('keputusan_id',$lagu_taklulus->keputusan_id = 2);
+        $songs = Song::where('keputusan_id',$lagu_taklulus->keputusan_id = 2)
+        ->whereHas('penilai', function($query){
+            $query->where('user_id', auth()->user()->id);
+        })
+        ->latest();
+        
 
         $songs->where(function($query) {
             $query->where('keputusan_id', 2);
@@ -187,7 +196,7 @@ class PenilaiController extends Controller
 
         return view ('penilai.index_taklulus',[
 
-            "songs"=>$songs->paginate(3),
+            "songs"=>$songs->paginate(20),
             'statuses'=>Status::all(),
             'penilais'=>Penilai::all(),
             'countries'=>Country::all(),
