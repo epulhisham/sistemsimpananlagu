@@ -25,6 +25,7 @@ class PelulusController extends Controller
     {
         $songs = Song::latest();
 
+<<<<<<< HEAD
         if ($request->has('search_query') && $request->has('search_field')) {
             $searchField = $request->input('search_field');
             $searchQuery = $request->input('search_query');
@@ -32,6 +33,21 @@ class PelulusController extends Controller
             if ($searchField === 'song_category') {
                 $songs->whereHas('song_category', function ($query) use ($searchQuery) {
                     $query->where('kategori', 'like', '%' . $searchQuery . '%');
+=======
+        if(request('search')){
+
+            $songs->where('artis', 'like', '%' . request('search') . '%')
+                ->orWhere('tajuk', 'like', '%' . request('search') . '%')
+                ->orWhere('album', 'like', '%' . request('search') . '%')
+                ->orWhere('pencipta_lagu', 'like', '%' . request('search') . '%')
+                ->orWhere('penulis_lirik', 'like', '%' . request('search') . '%')
+                ->orWhere('syarikat_rakaman', 'like', '%' . request('search') . '%')
+                ->orWhereHas('penilai', function($pilih_penilai){
+                    $pilih_penilai->where('pilih_penilai', 'like', '%' . request('search') . '%');
+                })
+                ->orWhereHas('keputusan', function($pilih_keputusan){
+                    $pilih_keputusan->where('pilih_keputusan', 'like', '%' . request('search') . '%');
+>>>>>>> 87c393958a09f990c16591640cf583eccecdea84
                 });
             } elseif ($searchField === 'country') {
                 $songs->whereHas('country', function ($query) use ($searchQuery) {

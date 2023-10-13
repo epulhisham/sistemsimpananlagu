@@ -111,7 +111,11 @@ class LaguController extends Controller
             'country_id' => 'required|not_in:0',
             'catatan' => 'max:255',
             'lagu'=>'required|mimes:audio/mpeg,mpga,mp3,wav,aac,flac|max:150000',
+<<<<<<< HEAD
             'fail_lagu'=>'mimes:pdf,docx,png,jpeg',
+=======
+            'fail_lagu'=>'mimes:pdf,docx',
+>>>>>>> 87c393958a09f990c16591640cf583eccecdea84
             'tarikh_diterima' => '',
             'tarikh_dinilai' => '',
             'tarikh_diluluskan' => '',      
@@ -223,7 +227,11 @@ class LaguController extends Controller
             'country_id' => 'not_in:0',
             'catatan' => 'max:255',
             'lagu'=>'mimes:audio/mpeg,mpga,mp3,wav,aac,flac|max:150000',
+<<<<<<< HEAD
             'fail_lagu'=>'mimes:pdf,docx,png,jpeg',   
+=======
+            'fail_lagu'=>'mimes:pdf,docx',   
+>>>>>>> 87c393958a09f990c16591640cf583eccecdea84
             'tarikh_diterima' => '',
             'tarikh_dinilai' => '',
             'tarikh_diluluskan' => '',   
