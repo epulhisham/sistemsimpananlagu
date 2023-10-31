@@ -54,7 +54,6 @@
                 <th scope="col">Artis</th>
                 <th scope="col">Tajuk</th>
                 <th scope="col">Album</th>
-<<<<<<< HEAD
                 <th scope="col">No. Rujukan/ No. Album</th>
                 <th scope="col">Pencipta Lagu</th>
                 <th scope="col">Penulis Lirik</th>
@@ -62,16 +61,10 @@
                 <th scope="col">Kategori Lagu</th>
                 <th scope="col">Negara</th>
                 <th scope="col">Catatan</th>
-=======
->>>>>>> 87c393958a09f990c16591640cf583eccecdea84
                 <th scope="col">Lagu</th>
                 <th scope="col">Fail Lagu</th>
                 <th scope="col">Tindakan</th>
-<<<<<<< HEAD
                 <th scope="col">Pengguna</th>
-=======
-                <th scope="col">Daripada</th>
->>>>>>> 87c393958a09f990c16591640cf583eccecdea84
                 <th scope="col">Nama Penilai</th>
                 <th scope="col">Penilaian</th>
                 <th scope="col">Keputusan</th>
@@ -85,7 +78,6 @@
                         <td>{{ $song->artis }}</td>
                         <td>{{ $song->tajuk }}</td>
                         <td>{{ $song->album }}</td>
-<<<<<<< HEAD
                         <td>{{ $song->ref_number }}</td>
                         <td>{{ $song->pencipta_lagu }}</td>
                         <td>{{ $song->penulis_lirik }}</td>
@@ -93,13 +85,10 @@
                         <td>{{ $song->song_category->kategori }}</td>
                         <td>{{ $song->country->name }}</td>
                         <td>{{ $song->catatan }}</td>
-=======
->>>>>>> 87c393958a09f990c16591640cf583eccecdea84
                         <td>
                             <div class="audio-container">
                                 <audio controls src="{{ $song->lagu }}"></audio>
                             </div>
-<<<<<<< HEAD
                         </td>
                         <td>
                             <?php
@@ -108,8 +97,6 @@
                             $fileExtension = pathinfo($url, PATHINFO_EXTENSION);
                             ?>
                             <a href="{{ asset($song->fail_lagu) }}" download target="_blank">{{ $filename }} ({{ strtoupper($fileExtension) }})</a>
-=======
->>>>>>> 87c393958a09f990c16591640cf583eccecdea84
                         </td>
                         <td>
                             <div class="d-flex align-item-center">
@@ -194,7 +181,6 @@
                     <th scope="col">Artis</th>
                     <th scope="col">Tajuk</th>
                     <th scope="col">Album</th>
-<<<<<<< HEAD
                     <th scope="col">No. Rujukan/ No. Album</th>
                     <th scope="col">Pencipta Lagu</th>
                     <th scope="col">Penulis Lirik</th>
@@ -206,11 +192,6 @@
                     <th scope="col">Fail Lagu</th>
                     <th scope="col">Tindakan</th>
                     <th scope="col">Pengguna</th>
-=======
-                    <th scope="col">Lagu</th>
-                    <th scope="col">Tindakan</th>
-                    <th scope="col">Daripada</th>
->>>>>>> 87c393958a09f990c16591640cf583eccecdea84
                     <th scope="col">Nama Penilai</th>
                     <th scope="col">Penilaian</th>
                     <th scope="col">Keputusan</th>
@@ -219,11 +200,7 @@
             </thead>
             <tbody>
                 <tr>
-<<<<<<< HEAD
                     <td colspan="19" class="text-center">Tiada Maklumat</td>
-=======
-                    <td colspan="11" class="text-center">Tiada Maklumat</td>
->>>>>>> 87c393958a09f990c16591640cf583eccecdea84
                 </tr>
             </tbody>
         </table>

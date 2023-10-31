@@ -101,19 +101,28 @@
             @enderror
             </div>
             <div class="mb-3">
-                <div class="mb-3">
-                    <label for="lagu" class="form-label">Audio Lagu</label>
-                    <input class="form-control @error('lagu') is-invalid @enderror" type="file" id="lagu" name="lagu" multiple>
-                    @error('lagu')
-                    <div class="invalid-feedback">
-                        {{ $message }}
-                    </div>      
-                    @enderror
+                <label for="lagu" class="form-label">Audio Lagu</label>
+                <div class="d-flex align-items-center mb-2">
+                    <audio controls src="{{ $song->lagu }}" class="mr-2"></audio>
                 </div>
+                <input class="form-control @error('lagu') is-invalid @enderror" type="file" id="lagu" name="lagu" multiple>
+                @error('lagu')
+                <div class="invalid-feedback">
+                    {{ $message }}
+                </div>
+                @enderror
             </div>
             <div class="mb-3">
                 <div class="mb-3">
                     <label for="fail_lagu" class="form-label">Lirik Lagu</label>
+                    <div class="d-flex align-items-center mb-2">
+                        <?php
+                        $url = $song->fail_lagu;
+                        $filename = pathinfo($url, PATHINFO_FILENAME);
+                        $fileExtension = pathinfo($url, PATHINFO_EXTENSION);
+                        ?>
+                        <a href="{{ asset($song->fail_lagu) }}" download target="_blank">{{ $filename }} ({{ strtoupper($fileExtension) }})</a>
+                    </div>
                     <input class="form-control @error('fail_lagu') is-invalid @enderror" type="file" id="fail_lagu" name="fail_lagu" multiple>
                     @error('fail_lagu')
                     <div class="invalid-feedback">

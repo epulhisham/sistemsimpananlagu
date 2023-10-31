@@ -34,7 +34,15 @@
                         <th scope="col">Artis</th>
                         <th scope="col">Tajuk</th>
                         <th scope="col">Album</th>
+                        <th scope="col">No. Rujukan/ No. Album</th>
+                        <th scope="col">Pencipta Lagu</th>
+                        <th scope="col">Penulis Lirik</th>
+                        <th scope="col">Syarikat Rakaman</th>
+                        <th scope="col">Kategori Lagu</th>
+                        <th scope="col">Negara</th>
+                        <th scope="col">Catatan</th>
                         <th scope="col">Lagu</th>
+                        <th scope="col">Fail Lagu</th>
                         <th scope="col">Tindakan</th>
                         <th scope="col">Daripada</th>
                         <th scope="col">Nama Penilai</th>
@@ -50,10 +58,25 @@
                             <td>{{ $song->artis }}</td>
                             <td>{{ $song->tajuk }}</td>
                             <td>{{ $song->album }}</td>
+                            <td>{{ $song->ref_number }}</td>
+                            <td>{{ $song->pencipta_lagu }}</td>
+                            <td>{{ $song->penulis_lirik }}</td>
+                            <td>{{ $song->syarikat_rakaman }}</td>
+                            <td>{{ $song->song_category->kategori }}</td>
+                            <td>{{ $song->country->name }}</td>
+                            <td>{{ $song->catatan }}</td>
                             <td>
                                 <div class="audio-container">
                                     <audio controls src="{{ $song->lagu }}"></audio>
                                 </div>
+                            </td>
+                            <td>
+                                <?php
+                                $url = $song->fail_lagu;
+                                $filename = pathinfo($url, PATHINFO_FILENAME);
+                                $fileExtension = pathinfo($url, PATHINFO_EXTENSION);
+                                ?>
+                                <a href="{{ asset($song->fail_lagu) }}" download target="_blank">{{ $filename }} ({{ strtoupper($fileExtension) }})</a>
                             </td>
                             <td>
                                 <div class="d-flex align-item-center">

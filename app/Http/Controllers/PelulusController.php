@@ -25,7 +25,6 @@ class PelulusController extends Controller
     {
         $songs = Song::latest();
 
-<<<<<<< HEAD
         if ($request->has('search_query') && $request->has('search_field')) {
             $searchField = $request->input('search_field');
             $searchQuery = $request->input('search_query');
@@ -33,21 +32,6 @@ class PelulusController extends Controller
             if ($searchField === 'song_category') {
                 $songs->whereHas('song_category', function ($query) use ($searchQuery) {
                     $query->where('kategori', 'like', '%' . $searchQuery . '%');
-=======
-        if(request('search')){
-
-            $songs->where('artis', 'like', '%' . request('search') . '%')
-                ->orWhere('tajuk', 'like', '%' . request('search') . '%')
-                ->orWhere('album', 'like', '%' . request('search') . '%')
-                ->orWhere('pencipta_lagu', 'like', '%' . request('search') . '%')
-                ->orWhere('penulis_lirik', 'like', '%' . request('search') . '%')
-                ->orWhere('syarikat_rakaman', 'like', '%' . request('search') . '%')
-                ->orWhereHas('penilai', function($pilih_penilai){
-                    $pilih_penilai->where('pilih_penilai', 'like', '%' . request('search') . '%');
-                })
-                ->orWhereHas('keputusan', function($pilih_keputusan){
-                    $pilih_keputusan->where('pilih_keputusan', 'like', '%' . request('search') . '%');
->>>>>>> 87c393958a09f990c16591640cf583eccecdea84
                 });
             } elseif ($searchField === 'country') {
                 $songs->whereHas('country', function ($query) use ($searchQuery) {
@@ -85,9 +69,9 @@ class PelulusController extends Controller
                 }
             }  elseif($searchField === 'terbit') {
                 if ($searchQuery === 'belum diterbit') {
-                    $searchQuery = 0; // Map "belum diterbit" to 0
+                    $searchQuery = 0;
                 } elseif ($searchQuery === 'telah diterbit') {
-                    $searchQuery = 1; // Map "telah diterbit" to 1
+                    $searchQuery = 1;
                 }
             
                 $songs->where('terbit', $searchQuery);
@@ -139,31 +123,42 @@ class PelulusController extends Controller
 
     public function index_statistik(Request $request)
     {   
-        $search = $request->input('search');
+        $usernames = DB::table('users')
+            ->select('id', 'name')
+            ->where('choose_user_id', 2)
+            ->get();
+    
+        $search = $request->input('username');
         $startDate = $request->input('startDate');
         $endDate = $request->input('endDate');
-        
+    
         $downloads = Download::whereHas('user', function ($query) use ($search) {
             $query->where('name', 'LIKE', '%'.$search.'%');
         })
         ->whereBetween('created_at', [$startDate, $endDate])
         ->paginate(5)
-        ->appends(['search' => $search, 'startDate' => $startDate, 'endDate' => $endDate]);
-
-        $labels = $downloads->pluck('user.name')->unique();
-        $data = $downloads->groupBy('user.name')->map(function ($downloadsByUser) {
-        return count($downloadsByUser);
+        ->appends(['username' => $search, 'startDate' => $startDate, 'endDate' => $endDate]);
+    
+        // Load all downloads (without pagination) for the bar graph
+        $downloadsForGraph = Download::whereHas('user', function ($query) use ($search) {
+            $query->where('name', 'LIKE', '%'.$search.'%');
+        })
+        ->whereBetween('created_at', [$startDate, $endDate])
+        ->get();
+    
+        $labels = $downloadsForGraph->pluck('user.name')->unique();
+        $data = $downloadsForGraph->groupBy('user.name')->map(function ($downloadsByUser) {
+            return count($downloadsByUser);
         })->values();
-
-
-        return view('pelulus.index_statistik',[
-
+    
+        return view('pelulus.index_statistik', [
             'downloads' => $downloads,
-            'labels'=>$labels,
-            'data'=>$data
-
+            'labels' => $labels,
+            'data' => $data,
+            'usernames' => $usernames,
         ]);
     }
+    
 
     public function index_taklulus(Song $lagu_tak_lulus)
     {
@@ -271,7 +266,7 @@ class PelulusController extends Controller
             $pelulus_lagu->penilai_id = $request->input('penilai_id');
             $pelulus_lagu->tarikh_diluluskan = $request->input('tarikh_diluluskan');
         } else {
-            $pelulus_lagu->tarikh_dinilai = $request->input('tarikh_dinilai');
+            $pelulus_lagu->tarikh_dinilai = null;
             $pelulus_lagu->keputusan_id = 3;
             $pelulus_lagu->penilai_id = $request->input('penilai_id');
             $pelulus_lagu->status_id = $request->input('status_id');

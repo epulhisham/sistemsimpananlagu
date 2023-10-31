@@ -20,17 +20,29 @@ class DiterbitController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function index(Song $lagu_diterbit)
+    public function index(Song $lagu_diterbit, Request $request)
     {
             $songs = Song::where('terbit',$lagu_diterbit->terbit = 1)->latest();
     
-            if(request('search')){
-    
-                $songs->where('artis', 'like', '%' . request('search') . '%')
-                    ->orWhere('tajuk', 'like', '%' . request('search') . '%')
-                    ->orWhereHas('user', function($name){
-                        $name->where('name', 'like', '%' . request('search') . '%');
+            if ($request->has('search_query') && $request->has('search_field')) {
+                $searchField = $request->input('search_field');
+                $searchQuery = $request->input('search_query');
+        
+                if ($searchField === 'song_category') {
+                    $songs->whereHas('song_category', function ($query) use ($searchQuery) {
+                        $query->where('kategori', 'like', '%' . $searchQuery . '%');
                     });
+                } elseif ($searchField === 'country') {
+                    $songs->whereHas('country', function ($query) use ($searchQuery) {
+                        $query->where('name', 'like', '%' . $searchQuery . '%');
+                    });
+                }elseif ($searchField === 'user') {
+                    $songs->whereHas('user', function ($query) use ($searchQuery) {
+                        $query->where('name', 'like', '%' . $searchQuery . '%');
+                    });
+                } else {
+                    $songs->where($searchField, 'like', '%' . $searchQuery . '%');
+                }
             }
             
             return view ('diterbit.index',[

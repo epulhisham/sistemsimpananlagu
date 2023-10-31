@@ -20,7 +20,12 @@
     <div class="col-md-6">
         <form action="/statistik">
             <div class="input-group mb-3">
-                <input type="text" class="form-control" placeholder="Search" name="search" value="{{ request('search') }}">
+                <select class="form-select" name="username" id="username">
+                    <option value="">Pilih</option>
+                    @foreach ($usernames as $user)
+                        <option value="{{ $user->name }}">{{ $user->name }}</option>
+                    @endforeach
+                </select>
                 <input type="date" class="form-control" id="startDate" name="startDate" value="{{ request('startDate') }}" >
                 <input type="date" class="form-control" id="endDate" name="endDate" value="{{ request('endDate') }}">
                 <button class="btn btn-dark" type="submit">Cari</button>
