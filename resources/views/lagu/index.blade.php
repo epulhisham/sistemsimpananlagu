@@ -96,6 +96,11 @@
                             <a href="/lagu/{{ $song->id }}" class="badge bg-success link-light mx-1">
                                 <span data-feather="file-text" class="align-text-bottom"></span>
                             </a>
+                            @can('syarikat_stesen')
+                                <a href="/lagu/{{ $song->id }}/edit" class="badge bg-warning link-light mx-1">
+                                    <span data-feather="edit-3" class=""></span>
+                                </a>
+                            @endcan
                         </div>
                     </td>                                       
                     <td>
