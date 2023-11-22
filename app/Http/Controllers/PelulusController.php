@@ -181,7 +181,7 @@ class PelulusController extends Controller
 
         return view ('pelulus.index_tak_lulus',[
 
-            "songs"=>$songs->paginate(10),
+            "songs"=>$songs->paginate(20),
             'statuses'=>Status::all(),
             'penilais'=>Penilai::all(),
             'countries'=>Country::all(),
@@ -264,6 +264,11 @@ class PelulusController extends Controller
             $pelulus_lagu->keputusan_id = 1;
             $pelulus_lagu->status_id = $request->input('status_id');
             $pelulus_lagu->penilai_id = $request->input('penilai_id');
+            $pelulus_lagu->lirik = $request->input('lirik');
+            $pelulus_lagu->sebutan = $request->input('sebutan');
+            $pelulus_lagu->nyanyian = $request->input('nyanyian');
+            $pelulus_lagu->muzik = $request->input('muzik');
+            $pelulus_lagu->penerbitan_teknikal = $request->input('penerbitan_teknikal');
             $pelulus_lagu->tarikh_diluluskan = $request->input('tarikh_diluluskan');
         } else {
             $pelulus_lagu->tarikh_dinilai = null;

@@ -49,6 +49,9 @@
                         <th scope="col">Penilaian</th>
                         <th scope="col">Keputusan</th>
                         <th scope="col">Terbit</th>
+                        <th scope="col">Tarikh Dihantar</th>
+                        <th scope="col">Tarikh Dinilai</th>
+                        <th scope="col">Tarikh Diterbit</th>
                     </tr>
                 </thead>
                 <tbody>
@@ -161,17 +164,28 @@
                     <th scope="col">Artis</th>
                     <th scope="col">Tajuk</th>
                     <th scope="col">Album</th>
+                    <th scope="col">No. Rujukan/ No. Album</th>
+                    <th scope="col">Pencipta Lagu</th>
+                    <th scope="col">Penulis Lirik</th>
+                    <th scope="col">Syarikat Rakaman</th>
+                    <th scope="col">Kategori Lagu</th>
+                    <th scope="col">Negara</th>
+                    <th scope="col">Catatan</th>
                     <th scope="col">Lagu</th>
+                    <th scope="col">Fail Lagu</th>
                     <th scope="col">Tindakan</th>
                     <th scope="col">Daripada</th>
                     <th scope="col">Nama Penilai</th>
                     <th scope="col">Penilaian</th>
                     <th scope="col">Keputusan</th>
                     <th scope="col">Terbit</th>
+                    <th scope="col">Tarikh Dihantar</th>
+                    <th scope="col">Tarikh Dinilai</th>
+                    <th scope="col">Tarikh Diterbit</th>
                 </tr>
             </thead>
             <tr>
-                <td colspan="11" class="text-center">Tiada Maklumat.</td>
+                <td colspan="22" class="text-center">Tiada Maklumat.</td>
             </tr>
         </table>
     @endif

@@ -133,7 +133,7 @@
             @enderror
         </div>
         <div class="mb-3">
-            <label for="keputusan class="form-label">Keputusan</label>
+            <label for="keputusan" class="form-label">Keputusan</label>
             <select class="form-select" name="keputusan_id" disabled>
                 <option value="0">- Pilih -</option>
                 @foreach ($keputusans as $keputusan)

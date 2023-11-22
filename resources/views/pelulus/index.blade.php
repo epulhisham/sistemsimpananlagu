@@ -69,6 +69,9 @@
                 <th scope="col">Penilaian</th>
                 <th scope="col">Keputusan</th>
                 <th scope="col">Terbit</th>
+                <th scope="col">Tarikh Dihantar</th>
+                <th scope="col">Tarikh Dinilai</th>
+                <th scope="col">Tarikh Diterbit</th>
                 </tr>
             </thead>
             <tbody>
@@ -149,7 +152,7 @@
                             @if ($song->tarikh_dinilai == null)
                                 Belum dinilai
                             @else
-                                Telah dinilai
+                                Telah dinilai 
                             @endif
                         </td>
                         <td>
@@ -162,6 +165,27 @@
                         <td>
                             @if ($song->terbit > 0)
                                 Telah diterbit
+                            @else
+                                Belum diterbit
+                            @endif
+                        </td>
+                        <td>
+                            {{ $song->tarikh_diterima }}
+                        </td>
+                        <td>
+                            @if ($song->tarikh_dinilai == null)
+                                Belum dinilai
+                            @else
+                                {{ $song->tarikh_dinilai }}
+                            @endif
+                        </td>
+                        <td>
+                            @if ($song->terbit > 0)
+                                {{ $song->tarikh_diluluskan }}
+                            @elseif ($song->keputusan_id == 3)
+                                Belum diterbit
+                            @elseif ($song->keputusan_id == 2)
+                                Lagu tidak diluluskan
                             @else
                                 Belum diterbit
                             @endif
@@ -196,11 +220,14 @@
                     <th scope="col">Penilaian</th>
                     <th scope="col">Keputusan</th>
                     <th scope="col">Terbit</th>
+                    <th scope="col">Tarikh Dihantar</th>
+                    <th scope="col">Tarikh Dinilai</th>
+                    <th scope="col">Tarikh Diterbit</th>
                 </tr>
             </thead>
             <tbody>
                 <tr>
-                    <td colspan="19" class="text-center">Tiada Maklumat</td>
+                    <td colspan="22" class="text-center">Tiada Maklumat</td>
                 </tr>
             </tbody>
         </table>

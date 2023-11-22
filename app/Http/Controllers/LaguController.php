@@ -10,6 +10,7 @@ use App\Models\Keputusan;
 use Illuminate\Http\Request;
 use App\Models\Song_category;
 use Illuminate\Routing\Controller;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Storage;
 
 class LaguController extends Controller
@@ -143,7 +144,6 @@ class LaguController extends Controller
             $filePath = 'public/files/'.$fileNameToStore;
             $toLocalStorage = $request->fail_lagu->storeAs('public/files/', $fileNameToStore);
             echo $toLocalStorage;
-            // $validatedData['fail_lagu'] = '/storage/files/' . $fileNameToStore;
             $validatedData['fail_lagu'] = 'https://d38gy8luw6hjwu.cloudfront.net/' . $filePath;
         }
         
@@ -151,7 +151,6 @@ class LaguController extends Controller
 
 
         Song::create($validatedData);
-        // Storage::put('/lagu/' . $fileNameToStore, $request->fail_lagu);
 
         return redirect('/lagu')->with('success', 'Lagu baharu ditambah!');
     }
@@ -238,43 +237,27 @@ class LaguController extends Controller
 
         if($request->hasFile('lagu')){
 
-            // if($lagu->lagu){
-            //     Storage::delete($lagu->lagu);     
-            // }
             Storage::delete(str_replace('https://d38gy8luw6hjwu.cloudfront.net/',"",$lagu->lagu));
             $filenameWithExt = $request -> lagu -> getClientOriginalName();
             $filename = pathinfo($filenameWithExt, PATHINFO_FILENAME);
             $extension = $request->lagu->getClientOriginalExtension();
             $fileNameToStore = $filename . '_' . time() . '.' . $extension;
-            // $toLocalStorage = $request->lagu->storeAs('public/songs/', $fileNameToStore);
-            // $validatedData['lagu'] = '/storage/songs/' . $fileNameToStore;
-            // dd($fileNameToStore);
             $filePath = 'public/songs/'.$fileNameToStore;
-            // $validatedData['lagu'] = $request->file('lagu')->put('songs');
             $toLocalStorage = $request->lagu->storeAs('public/songs/', $fileNameToStore);
             echo $toLocalStorage;
             $validatedData['lagu'] = 'https://d38gy8luw6hjwu.cloudfront.net/'. $filePath;
-            // $validatedData['lagu'] = '/storage/songs/' . $fileNameToStore;
         }
 
         if($request->hasFile('fail_lagu')){
             
-            // if($lagu->fail_lagu){
-            //     Storage::delete($lagu->fail_lagu);  
-            // }
             Storage::delete(str_replace('https://d38gy8luw6hjwu.cloudfront.net/',"",$lagu->fail_lagu));
             $filenameWithExt = $request -> fail_lagu -> getClientOriginalName();
             $filename = pathinfo($filenameWithExt, PATHINFO_FILENAME);
             $extension = $request->fail_lagu->getClientOriginalExtension();
             $fileNameToStore = $filename . '_' . time() . '.' . $extension;
-            // $toLocalStorage = $request->fail_lagu->storeAs('public/files/', $fileNameToStore);
-            // $validatedData['fail_lagu'] = '/storage/files/' . $fileNameToStore;
-            // dd($fileNameToStore);
             $filePath = 'public/files/'.$fileNameToStore;
-            // $validatedData['fail_lagu'] = $request->file('fail_lagu')->put('songs');
             $toLocalStorage = $request->fail_lagu->storeAs('public/files/', $fileNameToStore);
             echo $toLocalStorage;
-            // $validatedData['fail_lagu'] = '/storage/files/' . $fileNameToStore;
             $validatedData['fail_lagu'] = 'https://d38gy8luw6hjwu.cloudfront.net/' . $filePath;
         }
         
@@ -282,7 +265,11 @@ class LaguController extends Controller
 
         Song::where('id', $lagu->id)->update($validatedData);
 
-        return redirect('/pelulus-lagu')->with('success', 'Lagu telah dikemaskini!');
+        $user = Auth::user();
+
+        $redirectUrl = $user->choose_user_id == 2 ? '/lagu' : '/pelulus-lagu';
+
+        return redirect($redirectUrl)->with('success', 'Lagu telah dikemaskini!');
     }
 
     /**
@@ -293,13 +280,11 @@ class LaguController extends Controller
      */
     public function destroy(Song $lagu)
     {
-        if($lagu->lagu){
-            // Storage::delete($lagu->lagu);     
+        if($lagu->lagu){   
             Storage::delete(str_replace('https://d38gy8luw6hjwu.cloudfront.net/',"",$lagu->lagu));
         }
         
         if($lagu->fail_lagu){
-            // Storage::delete($lagu->fail_lagu);
             Storage::delete(str_replace('https://d38gy8luw6hjwu.cloudfront.net/',"",$lagu->fail_lagu)); 
         }
 
