@@ -1,0 +1,13 @@
+.nav-pills .nav-link.active,
+.nav-pills .show > .nav-link {
+  background-color: #212529; /* Set the background color for active elements */
+  color: #fff; /* Set the text color to light (e.g., white) for active elements */
+}
+
+.nav-pills .nav-link {
+  color: #212529; /* Set the default text color to dark (e.g., #212529) */
+}
+
+.dropdown-item.active, .dropdown-item:active {
+  background-color: #212529;
+}

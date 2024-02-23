@@ -1,0 +1,6 @@
+// jenis user
+Admin - Super Admin
+Pelulus - Admin
+Penilai - Penilai
+syarikat_setesen - stesen radio rtm
+syarikat_rakam - syarikat rakaman luar rtm
