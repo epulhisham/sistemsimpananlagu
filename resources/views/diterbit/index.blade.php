@@ -39,11 +39,12 @@
 </div>
 
 <div class="table-responsive-lg col-md-11">
+    <div style="overflow-x:auto;">
     @if (count($songs) > 0)
         <table class="table table-bordered">
             <thead>
                 <tr>
-                    <th scope="col">Bil.</th>
+                    <th scope="col">il.</th>
                     <th scope="col">Artis</th>
                     <th scope="col">Tajuk</th>
                     <th scope="col">Album</th>
@@ -110,7 +111,9 @@
                             {{ $song->tarikh_dinilai }}
                         @endif
                     </td>
-                    <td>{{ $song->updated_at }}</td>
+                    <td>
+                        {{ $song->updated_at->format('Y-m-d') }}
+                    </td>
                     </tr>
                 @endforeach
             </tbody>
@@ -151,6 +154,7 @@
             </tbody>
         </table>
     @endif
+    </div>
 </div>
 
 <script>

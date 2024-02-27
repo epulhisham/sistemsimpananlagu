@@ -24,7 +24,7 @@
     </div>
 </div>
 
-<div class="table-responsive col-lg-10">
+<div class="table-responsive-md col-lg-10">
         @if (count($songs) > 0)
             <table class="table table-bordered">
                 <thead>
@@ -36,6 +36,9 @@
                     <th scope="col">Tindakan</th>
                     <th scope="col">Penilaian</th>
                     <th scope="col">Keputusan</th>
+                    <th scope="col">Tarikh Dihantar</th>
+                    <th scope="col">Tarikh Dinilai</th>
+                    <th scope="col">Tarikh Diterbit</th>
                     </tr>
                 </thead>
                 <tbody>
@@ -71,6 +74,19 @@
                             Belum membuat keputusan
                         @endif
                     </td>
+                    <td>
+                        {{ $song->tarikh_diterima }}
+                    </td>
+                    <td>
+                        @if ($song->tarikh_dinilai == null)
+                            Belum dinilai
+                        @else
+                            {{ $song->tarikh_dinilai }}
+                        @endif
+                    </td>
+                    <td>
+                        {{ $song->updated_at->format('Y-m-d') }}
+                    </td>
                     </tr>
                 @endforeach
             </tbody>
@@ -89,10 +105,13 @@
                     <th scope="col">Tindakan</th>
                     <th scope="col">Penilaian</th>
                     <th scope="col">Keputusan</th>
+                    <th scope="col">Tarikh Dihantar</th>
+                    <th scope="col">Tarikh Dinilai</th>
+                    <th scope="col">Tarikh Diterbit</th>
                     </tr>
                 </thead>
                 <tr>
-                    <td class="text-center" colspan="7">Tiada Maklumat.</td>
+                    <td class="text-center" colspan="10">Tiada Maklumat.</td>
                 </tr>
             </table>
         @endif

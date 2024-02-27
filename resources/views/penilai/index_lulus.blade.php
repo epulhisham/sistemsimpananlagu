@@ -35,6 +35,9 @@
                 <th scope="col">Tindakan</th>
                 <th scope="col">Penilaian</th>
                 <th scope="col">Keputusan</th>
+                <th scope="col">Tarikh Dihantar</th>
+                <th scope="col">Tarikh Dinilai</th>
+                <th scope="col">Tarikh Diterbit</th>
                 </tr>
             </thead>
             <tbody>
@@ -70,6 +73,19 @@
                             Belum membuat keputusan
                         @endif
                     </td>
+                    <td>
+                        {{ $song->tarikh_diterima }}
+                    </td>
+                    <td>
+                        @if ($song->tarikh_dinilai == null)
+                            Belum dinilai
+                        @else
+                            {{ $song->tarikh_dinilai }}
+                        @endif
+                    </td>
+                    <td>
+                        {{ $song->updated_at->format('Y-m-d') }}
+                    </td>
                     </tr>
                 @endforeach
             </tbody>
@@ -86,14 +102,16 @@
                 <th scope="col">Tajuk</th>
                 <th scope="col">Lagu</th>
                 <th scope="col">Tindakan</th>
-                <th scope="col">Nama Penilai</th>
                 <th scope="col">Penilaian</th>
                 <th scope="col">Keputusan</th>
+                <th scope="col">Tarikh Dihantar</th>
+                <th scope="col">Tarikh Dinilai</th>
+                <th scope="col">Tarikh Diterbit</th>
                 </tr>
             </thead>
             <tbody>
                 <tr>
-                    <td colspan="8" class="text-center">Tiada Maklumat.</td>
+                    <td colspan="11" class="text-center">Tiada Maklumat.</td>
                 </tr>
             </tbody>
         </table>

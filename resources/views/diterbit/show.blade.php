@@ -132,6 +132,19 @@
                 </div>      
             @enderror
         </div>
+        <div class="mb-3">
+            <label for="keputusan" class="form-label">Keputusan</label>
+            <select class="form-select" name="keputusan_id" disabled>
+                <option value="0">- Pilih -</option>
+                @foreach ($keputusans as $keputusan)
+                    @if (old('keputusanid',$song->keputusan->id) == $keputusan->id)
+                        <option value="{{ $keputusan->id }}" selected>{{ $keputusan->pilih_keputusan }}</option>
+                    @else
+                        <option value="{{ $keputusan->id }}">{{ $keputusan->pilih_keputusan }}</option>
+                    @endif
+                @endforeach
+            </select>
+        </div>
         <a href="javascript:history.back()" class="btn btn-dark link-light">
             <span data-feather="arrow-left"></span>
             Kembali
